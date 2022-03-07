@@ -1,3 +1,4 @@
+import email
 from lib2to3.pgen2.pgen import DFAState
 from django.contrib.auth.models import AbstractUser
 from django.db import models
@@ -6,6 +7,14 @@ from django.db import models
 class User(AbstractUser):
     profile_image = models.URLField(default="https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/OOjs_UI_icon_userAvatar.svg/240px-OOjs_UI_icon_userAvatar.svg.png")
 
+    def serialize(self):
+
+        return {
+            "id": self.id,
+            "username": self.username,
+            "email": self.email,
+            "image": self.profile_image,
+        }
 
 class Post(models.Model):
     user = models.ForeignKey("User", on_delete=models.CASCADE, related_name="posts")
@@ -68,12 +77,17 @@ class Followers(models.Model):
     user = models.ForeignKey("User", on_delete=models.CASCADE, related_name="user_followers")
     following = models.ManyToManyField("User", related_name="user_following", blank=True)
 
-    def serialize(self):
+    def serialize_followers(self):
         return {
             "id": self.id,
-            "user": self.user.username,
+            "followers": self.user.username,
+        }
+    
+    def serialize_following(self):
+        return {
+            "id": self.id,
             "following": [user.username for user in self.following.all()],
         }
 
     def __str__(self):
-        return f"Followers {self.user}"
+        return f"{self.user} is following.."
