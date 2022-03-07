@@ -11,15 +11,18 @@ class Post(models.Model):
     user = models.ForeignKey("User", on_delete=models.CASCADE, related_name="posts")
     content = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
-    image = models.URLField(default='https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/OOjs_UI_icon_userAvatar.svg/240px-OOjs_UI_icon_userAvatar.svg.png')
+    image = models.URLField(default='', blank=True)
 
     def serialize(self):
+
         return {
             "id": self.id,
             "user": self.user.username,
             "content": self.content,
             "timestamp": self.timestamp.strftime("%b %d %Y, %I:%M %p"),
-            "image": self.image
+            "image": self.image,
+            "comments":  [comment.serialize() for comment in Comment.objects.filter(post=self)],
+            "likes": [like.serialize() for like in Likes.objects.filter(post=self)]
         }
 
     def __str__(self):
@@ -33,6 +36,7 @@ class Comment(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
 
     def serialize(self):
+        
         return {
             "id": self.id,
             "user": self.user.username,
@@ -48,18 +52,16 @@ class Comment(models.Model):
 class Likes(models.Model):
     user = models.ForeignKey("User", on_delete=models.CASCADE, related_name="user_likes")
     post = models.ForeignKey("Post", on_delete=models.CASCADE, related_name="posts_likes", blank=True, null=True)
-    comment = models.ForeignKey("Comment", on_delete=models.CASCADE, related_name="comment_likes", blank=True, null=True) 
 
     def serialize(self):
         return {
             "id": self.id,
             "user": self.user.username,
             "post": self.post.id,
-            "comment": self.comment.content
         }
 
     def __str__(self):
-        return f"{self.user} likes {self.post} or {self.comment}"
+        return f"{self.user} likes {self.post}"
 
 
 class Followers(models.Model):
