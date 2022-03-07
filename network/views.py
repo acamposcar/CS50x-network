@@ -3,8 +3,9 @@ from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
-
-from .models import User
+from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
+from .models import User, Post
 
 
 def index(request):
@@ -61,3 +62,12 @@ def register(request):
         return HttpResponseRedirect(reverse("index"))
     else:
         return render(request, "network/register.html")
+
+
+def posts(request):
+
+    posts = Post.objects.all()
+    # Return posts in reverse chronologial order
+    posts = posts.order_by("-timestamp").all()
+
+    return JsonResponse([post.serialize() for post in posts], safe=False)
