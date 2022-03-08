@@ -4,6 +4,8 @@
         <div class="container-post">
             <div><a href="{% url 'user_profile' post.user.username %}">{{ post.user.username }}</a></div>
             <div>{{ post.content }}</div>
+            <div>Likes:  {{ post.likes.all.count }}</div> 
+            <div>Comments:  {{ post.comments.all.count }}</div> 
             <div><a href="{% url 'post_view' post.id %}">{{ post.timestamp }}</a></div>
         </div>
         {% endfor %}
