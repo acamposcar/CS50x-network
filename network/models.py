@@ -62,6 +62,9 @@ class Likes(models.Model):
     user = models.ForeignKey("User", on_delete=models.CASCADE, related_name="user_likes")
     post = models.ForeignKey("Post", on_delete=models.CASCADE, related_name="posts_likes", blank=True, null=True)
 
+    class Meta:
+        unique_together = ['user', 'post']
+
     def serialize(self):
         return {
             "id": self.id,
