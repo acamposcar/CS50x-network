@@ -70,7 +70,7 @@ def post_view(request, post_id):
     try:
         post = Post.objects.get(pk=post_id)
     except Post.DoesNotExist:
-        return {"error": "Post not found.", "status": 404}
+        return JsonResponse({"error": "Post not found."}, status=404)
     
     comments = Comment.objects.filter(post=post)
 
@@ -90,12 +90,20 @@ def user_profile(request, username):
     except User.DoesNotExist:
         return JsonResponse({"error": "User not found."}, status=404)
 
+    # Query for users being followed by requested user
+    users_following = Followers.objects.filter(user = user)
+
+    # Query for users who follow requested user
+    users_followers = Followers.objects.filter(following = user)
+
     # Return user posts in reverse chronological order
     posts = Post.objects.filter(user=user).order_by("-timestamp").all()
     
     return render(request, "network/profile.html",{
             "user": user,
-            "posts": posts
+            "posts": posts,
+            'users_following': users_following,
+            'users_followers': users_followers
             })
 
 

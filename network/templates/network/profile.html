@@ -10,7 +10,14 @@
         <div class="container-posts">
             <h2>{{ user.username }}</h2>
             <div>{{ user.email }}</div>
-
+            <div>Followers count: {{ users_followers.count }}</div>
+            {% for follower in users_followers %}
+            <div>Followers: {{ follower.user.username }}</div>
+            {% endfor %}
+            <div>Following count: {{ users_following.count }}</div>
+            {% for user in users_following %}
+            <div>Following: {{ user.following.username }}</div>
+            {% endfor %}
         </div>
 
 {% include "network/partials/posts.html" %}
