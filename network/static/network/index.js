@@ -2,16 +2,20 @@ function getAllPosts() {
   /*----------------
   Gets email information from database
   ----------------*/
+    document.querySelector('form').onsubmit = () => {
+    createNewPost();
+    return false;
+  };
 fetch(`/api/posts`)
     .then((response) => response.json())
     .then((posts) => {
-        console.log(posts)
+
       if (posts.error) {
           pass
         // document.querySelector('#alert-email').style.display = 'block';
         // document.querySelector('#alert-email').textContent = emails.error;
       } else if (posts.length !== 0) {
-        posts.forEach((post) => createPost(post));
+        posts.forEach((post) => createPostContainer(post));
       } else {
         pass
         // document.querySelector('#no-emails').style.display = 'flex';
@@ -19,7 +23,7 @@ fetch(`/api/posts`)
     });
 }
 
-function createPost(post) {
+function createPostContainer(post) {
   /*----------------
   Creates email container for every email
   ----------------*/
@@ -44,13 +48,43 @@ function createPost(post) {
     postContainer.appendChild(time);
 
 
-  document.querySelector('.container').appendChild(postContainer);
+  document.querySelector('.container-posts').appendChild(postContainer);
 }
+
+
+/* --------------------
+CREATE NEW POST
+ -----------------------*/
+
+function createNewPost() {
+  /*----------------
+  Send email (POST)
+  ----------------*/
+  fetch('/api/new_post', {
+    method: 'POST',
+    body: JSON.stringify({
+      content: document.querySelector('#new-post-content').value,
+      image_url: document.querySelector('#new-post-image').value,
+    }),
+  })
+    .then((response) => response.json())
+    .then((result) => {
+      if (result.error) {
+        document.querySelector('#alert-compose').style.display = 'block';
+        document.querySelector('#alert-compose').textContent = result.error;
+      } else {
+        getAllPosts();
+      }
+    });
+}
+
+
 
 document.addEventListener('DOMContentLoaded', () => {
   // Use buttons to toggle between views
 
   // By default, load the inbox
-  getAllPosts();
-});
+  pass
+
+})
 

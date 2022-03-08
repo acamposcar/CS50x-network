@@ -1,0 +1,11 @@
+$primary-color: rgb(185, 60, 185);
+
+btn-primary{
+    background-color: $primary-color;
+}
+
+.container-post{
+    border: thin solid;
+    padding: 10px;
+    margin-top: 5px;
+}

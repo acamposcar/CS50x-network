@@ -1,0 +1,18 @@
+{% extends "network/layout.html" %} {% load static %}
+
+{% block script %}
+    <script src="{% static 'network/profile.js' %}"></script>
+{% endblock %}
+
+{% block body %}
+    <div id="#alert-compose"></div>
+
+        <div class="container-posts">
+            <h2>{{ user.username }}</h2>
+            <div>{{ user.email }}</div>
+
+        </div>
+
+{% include "network/partials/posts.html" %}
+
+{% endblock %}

@@ -3,6 +3,7 @@ from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from .models import Likes, User, Post, Followers
 from .views import login_view
+from django.views.decorators.csrf import csrf_exempt
 
 import json
 
@@ -91,7 +92,7 @@ def get_followers(request, username):
 
     return JsonResponse([follower.serialize_followers() for follower in followers], safe=False)
 
-
+@csrf_exempt
 @login_required(login_url=login_view)
 def new_post(request):
 
