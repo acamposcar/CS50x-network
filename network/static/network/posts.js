@@ -2,7 +2,7 @@ function getAllPosts() {
   /*----------------
   Gets email information from database
   ----------------*/
-fetch(`/posts`)
+fetch(`/api/posts`)
     .then((response) => response.json())
     .then((posts) => {
         console.log(posts)

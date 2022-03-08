@@ -35,7 +35,7 @@ class Post(models.Model):
         }
 
     def __str__(self):
-        return f"Post {self.id}"
+        return f"Post [{self.id}] made by {self.user.username} on {self.timestamp.strftime('%d %b %Y %H:%M:%S') }"
 
 
 class Comment(models.Model):
@@ -55,7 +55,7 @@ class Comment(models.Model):
         }
 
     def __str__(self):
-        return f"Comment {self.content}"
+        return f"Comment [{self.id}] made by {self.user.username} on {self.timestamp.strftime('%d %b %Y %H:%M:%S')}"
 
 
 class Likes(models.Model):
@@ -78,7 +78,10 @@ class Likes(models.Model):
 
 class Followers(models.Model):
     user = models.ForeignKey("User", on_delete=models.CASCADE, related_name="user_followers")
-    following = models.ManyToManyField("User", related_name="user_following", blank=True)
+    following = models.ForeignKey("User", on_delete=models.CASCADE, related_name="user_following", blank=True, null=True)
+    
+    class Meta:
+        unique_together = ['user', 'following']
 
     def serialize_followers(self):
         return {
@@ -89,8 +92,8 @@ class Followers(models.Model):
     def serialize_following(self):
         return {
             "id": self.id,
-            "following": [user.username for user in self.following.all()],
+            "following": self.following.username,
         }
 
     def __str__(self):
-        return f"{self.user} is following.."
+        return f"{self.user} is following {self.following}"
