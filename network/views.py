@@ -1,4 +1,3 @@
-import json
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
@@ -7,7 +6,9 @@ from django.urls import reverse
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django import forms
+from django.core.paginator import Paginator
 from .models import User, Post, Followers, Likes, Comment
+
 
 class NewPost(forms.Form):
     content = forms.CharField(widget=forms.Textarea(
@@ -24,8 +25,12 @@ def index(request):
     # Return posts in reverse chronological order
     posts = Post.objects.all().order_by("-timestamp")
     
+    paginator = Paginator(posts, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
     return render(request, "network/index.html", {
-            "posts": posts,
+            "page_obj": page_obj,
             "form": NewPost(),
             })
 
@@ -39,8 +44,12 @@ def user_posts(request, username):
     # Return posts in reverse chronological order
     posts = Post.objects.filter(user=user).order_by("-timestamp")
 
+    paginator = Paginator(posts, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
     return render(request, "network/index.html", {
-            "posts": posts,
+            "page_obj": page_obj,
             "form": NewPost(),
             })
 
@@ -78,8 +87,12 @@ def following_posts(request, username):
     # Return posts in reverse chronological order
     posts =Post.objects.filter(user__in=users_following).order_by("-timestamp")
 
+    paginator = Paginator(posts, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
     return render(request, "network/index.html", {
-            "posts": posts,
+            "page_obj": page_obj,
             "form": NewPost(),
             })
             
@@ -119,11 +132,17 @@ def user_profile(request, username):
     following_user_list = User.objects.filter(id__in=users_following)
     followers_user_list = User.objects.filter(id__in=users_followers)
     # Return user posts in reverse chronological order
+
     posts = Post.objects.filter(user=profile_user).order_by("-timestamp").all()
     
+    paginator = Paginator(posts, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+
     return render(request, "network/profile.html",{
             "profile_user": profile_user,
-            "posts": posts,
+            "page_obj": page_obj,
             'users_following': following_user_list,
             'users_followers': followers_user_list
             })
