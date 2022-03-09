@@ -44,7 +44,27 @@ def user_posts(request, username):
             "form": NewPost(),
             })
 
+def login_view(request):
+    if request.method == "POST":
 
+        # Attempt to sign user in
+        username = request.POST["username"]
+        password = request.POST["password"]
+        user = authenticate(request, username=username, password=password)
+
+        # Check if authentication successful
+        if user is not None:
+            login(request, user)
+            return HttpResponseRedirect(reverse("index"))
+        else:
+            return render(request, "network/login.html", {
+                "message": "Invalid username and/or password."
+            })
+    else:
+        return render(request, "network/login.html")
+
+        
+@login_required(login_url=login_view)
 def following_posts(request, username):
 
     try:   
@@ -109,26 +129,6 @@ def user_profile(request, username):
             })
 
 
-def login_view(request):
-    if request.method == "POST":
-
-        # Attempt to sign user in
-        username = request.POST["username"]
-        password = request.POST["password"]
-        user = authenticate(request, username=username, password=password)
-
-        # Check if authentication successful
-        if user is not None:
-            login(request, user)
-            return HttpResponseRedirect(reverse("index"))
-        else:
-            return render(request, "network/login.html", {
-                "message": "Invalid username and/or password."
-            })
-    else:
-        return render(request, "network/login.html")
-
-
 def logout_view(request):
     logout(request)
     return HttpResponseRedirect(reverse("index"))
@@ -183,6 +183,44 @@ def new_post(request):
         post.save()
 
     return HttpResponseRedirect(reverse("index"))
+
+@login_required(login_url=login_view)
+def edit_post(request, post_id):
+    # Query current post
+    try:
+        post = Post.objects.get(pk=post_id)
+    except Post.DoesNotExist:
+        return JsonResponse({"error": "Post not found."}, status=404)
+
+    # Request user must be the same as post author to be able to edit the post
+    if request.user != post.user:
+        return JsonResponse({"error": "Forbidden."}, status=403)
+
+    # Edit post must be via PUT
+    if request.method == "POST":
+        
+        form = NewPost(request.POST)
+
+        if form.is_valid():
+            content = form.cleaned_data["content"]
+            image_url = form.cleaned_data["image_url"]
+
+            # Update post
+            post.content = content
+            post.image=image_url            
+            post.save()
+
+        return HttpResponseRedirect(reverse("post_view", kwargs={"post_id": post_id}))
+    
+    elif request.method == 'GET':
+
+        return render(request, "network/edit.html", {
+                "form": NewPost(initial={'content': post.content, 'image_url': post.image}),
+                "post": post
+            })
+    else:
+        return JsonResponse({"error": "PUT or GET request required."}, status=400)
+    
 
 
 @login_required(login_url=login_view)
