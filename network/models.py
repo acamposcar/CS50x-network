@@ -14,6 +14,11 @@ class Post(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
     image = models.URLField(default='', blank=True)
 
+    def users_likes(self):
+        user_likes_list = Likes.objects.filter(post=self).values_list('user')
+
+        return User.objects.filter(id__in = user_likes_list)
+
     def __str__(self):
         return f"Post [{self.id}] made by {self.user.username} on {self.timestamp.strftime('%d %b %Y %H:%M:%S') }"
 

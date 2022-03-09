@@ -8,16 +8,27 @@
     <div id="#alert-compose"></div>
 
         <div class="container-posts">
-            <h2>{{ user.username }}</h2>
-            <div>{{ user.email }}</div>
+            <h2>{{ profile_user.username }}</h2>
+            <div>{{ profile_user.email }}</div>
             <div>Followers count: {{ users_followers.count }}</div>
             {% for follower in users_followers %}
-            <div>Followers: {{ follower.user.username }}</div>
+            <div>Followers: {{ follower.username }}</div>
             {% endfor %}
             <div>Following count: {{ users_following.count }}</div>
             {% for user in users_following %}
-            <div>Following: {{ user.following.username }}</div>
+            <div>Following: {{ user.username }}</div>
             {% endfor %}
+            
+            {% if user.is_authenticated and profile_user != user %}
+            <form action="{% url 'new_follow' profile_user.username %}" method="post">
+                {% csrf_token %}
+                {% if user in users_followers %}
+                <input class="btn btn-danger" type="submit" value="Unfollow">
+                {% else %}
+                <input class="btn btn-primary" type="submit" value="Follow">
+                {% endif %}
+            </form>
+            {% endif %}
         </div>
 
 {% include "network/partials/posts.html" %}

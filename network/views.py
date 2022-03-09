@@ -45,7 +45,7 @@ def user_posts(request, username):
             })
 
 
-def following_view(request, username):
+def following_posts(request, username):
 
     try:   
         user = User.objects.get(username = username)
@@ -86,24 +86,26 @@ def user_profile(request, username):
     ##     return JsonResponse({"error": "Forbidden."}, status=403)
 
     try:   
-        user = User.objects.get(username = username)
+        profile_user = User.objects.get(username = username)
     except User.DoesNotExist:
         return JsonResponse({"error": "User not found."}, status=404)
 
     # Query for users being followed by requested user
-    users_following = Followers.objects.filter(user = user)
+    users_following = Followers.objects.filter(user = profile_user).values_list('following')
 
     # Query for users who follow requested user
-    users_followers = Followers.objects.filter(following = user)
+    users_followers = Followers.objects.filter(following = profile_user).values_list('user')
 
+    following_user_list = User.objects.filter(id__in=users_following)
+    followers_user_list = User.objects.filter(id__in=users_followers)
     # Return user posts in reverse chronological order
-    posts = Post.objects.filter(user=user).order_by("-timestamp").all()
+    posts = Post.objects.filter(user=profile_user).order_by("-timestamp").all()
     
     return render(request, "network/profile.html",{
-            "user": user,
+            "profile_user": profile_user,
             "posts": posts,
-            'users_following': users_following,
-            'users_followers': users_followers
+            'users_following': following_user_list,
+            'users_followers': followers_user_list
             })
 
 
@@ -212,89 +214,64 @@ def new_comment(request, post_id):
     # Redirect to the place where the request came
     return HttpResponseRedirect(request.headers['Referer'])
 
-
-# Return all user posts
-def get_user_posts(username):
-
-    # Query for requested user
-    try:
-        user = User.objects.get(username = username)
-    except User.DoesNotExist:
-        return {"error": "User not found.", "status": 404}
-
-    # Get all posts made by the user
-    posts = Post.objects.filter(user = user)
-
-    # Return posts in reverse chronological order
-    posts = posts.order_by("-timestamp").all()
-
-    return JsonResponse([post.serialize() for post in posts], safe=False)
-
-
-# Return selected post
-def get_post(request, post_id):
-
-    # Query for requested post
-    try:
-        post = Post.objects.get(pk=post_id)
-    except Post.DoesNotExist:
-        return {"error": "Post not found.", "status": 404}
-
-    # Return post contents
-    if request.method == "GET":
-        return JsonResponse(post.serialize(), safe=False)
-    else:
-        return JsonResponse({"error": "GET request required."}, status=400)
-
-
-def get_following(request, username):
-
-    # Query for requested user
-    try:
-        user = User.objects.get(username = username)
-    except User.DoesNotExist:
-        return JsonResponse({"error": "User not found."}, status=404)
-
-
-    following = Followers.objects.filter(user = user)    
-
-    return JsonResponse([user.serialize_following() for user in following], safe=False)
-
-
-def get_followers(request, username):
-
-    # Query for requested user
-    try:
-        user = User.objects.filter(username = username)
-    except User.DoesNotExist: 
-        return JsonResponse({"error": "User not found."}, status=404)
-
-    followers = Followers.objects.filter(following__in=user)
-
-    return JsonResponse([follower.serialize_followers() for follower in followers], safe=False)
     
-
 @login_required(login_url=login_view)
 def new_like(request, post_id):
 
-    # Creating a new post must be via POST
+    # Creating a new like must be via POST
     if request.method != "POST":
         return JsonResponse({"error": "POST request required."}, status=400)
-
-    # Get all request data
-    data = json.loads(request.body)
-
+    
+    # Query for requested post
     try:
         post = Post.objects.get(pk=post_id)
     except User.DoesNotExist:
         return JsonResponse({"error": f"Post with id {post_id} does not exist."}, status=400)
 
-    # Save post in database
-    like = Likes(
-        user=request.user,
-        post = post,
-    )
-    like.save()
+    # Query for requested like
+    like = Likes.objects.filter(user=request.user, post=post)
 
-    return JsonResponse({"message": "Like created successfully."}, status=201)
+    if like.exists():
+        # Delete like from database
+        like.delete()
+    else:
+        # Save like in database
+        like = Likes(
+            user=request.user,
+            post = post,
+            )
+        like.save()
 
+    # Redirect to the place where the request came
+    return HttpResponseRedirect(request.headers['Referer'])
+
+
+@login_required(login_url=login_view)
+def new_follow(request, username):
+
+    # Creating a new like must be via POST
+    if request.method != "POST":
+        return JsonResponse({"error": "POST request required."}, status=400)
+    
+    # Query for requested user
+    try:   
+        following_user = User.objects.get(username = username)
+    except User.DoesNotExist:
+        return JsonResponse({"error": "User not found."}, status=404)
+
+    # Query for requested like
+    following = Followers.objects.filter(user=request.user, following=following_user)
+
+    if following.exists():
+        # Delete like from database
+        following.delete()
+    else:
+        # Save like in database
+        following = Followers(
+            user = request.user,
+            following = following_user,
+            )
+        following.save()
+
+    # Redirect to the place where the request came
+    return HttpResponseRedirect(request.headers['Referer'])
