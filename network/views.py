@@ -8,17 +8,15 @@ from django.contrib.auth.decorators import login_required
 from django import forms
 from django.core.paginator import Paginator
 from .models import User, Post, Followers, Likes, Comment
-
+from django.views.decorators.csrf import csrf_exempt
 
 class NewPost(forms.Form):
     content = forms.CharField(widget=forms.Textarea(
-        attrs={"placeholder": "¿What is going on?", "rows":5, "class":"form-control"}), required=True)
-    image_url=forms.URLField(widget=forms.URLInput(
-        attrs={"placeholder": "Image URL", "class":"form-control"}),  required=False)    
+        attrs={'autofocus': 'autofocus', "placeholder": "¿What is going on?", "rows":3, "class":"form-control"}), required=True)   
 
 class NewComment(forms.Form):
     content = forms.CharField(widget=forms.Textarea(
-        attrs={"placeholder": "Send your answer", "rows":5, "class":"form-control"}), required=True)
+        attrs={"placeholder": "Send your answer", "rows":3, "class":"form-control"}), required=True)
 
 
 def index(request):
@@ -105,11 +103,15 @@ def post_view(request, post_id):
     except Post.DoesNotExist:
         return JsonResponse({"error": "Post not found."}, status=404)
     
-    comments = Comment.objects.filter(post=post)
+    comments = Comment.objects.filter(post=post).order_by("-timestamp")
+
+    paginator = Paginator(comments, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
 
     return render(request, "network/post.html", {
             "post": post,
-            "comments": comments,
+            "page_obj": page_obj,
             "form": NewComment(),
             })
 
@@ -191,13 +193,11 @@ def new_post(request):
 
     if form.is_valid():
         content = form.cleaned_data["content"]
-        image_url = form.cleaned_data["image_url"]
 
         # Save post in database
         post = Post(
             user=request.user,
             content=content,
-            image=image_url,
         )
         post.save()
 
@@ -222,11 +222,9 @@ def edit_post(request, post_id):
 
         if form.is_valid():
             content = form.cleaned_data["content"]
-            image_url = form.cleaned_data["image_url"]
 
             # Update post
             post.content = content
-            post.image=image_url            
             post.save()
 
         return HttpResponseRedirect(reverse("post_view", kwargs={"post_id": post_id}))
@@ -234,7 +232,7 @@ def edit_post(request, post_id):
     elif request.method == 'GET':
 
         return render(request, "network/edit.html", {
-                "form": NewPost(initial={'content': post.content, 'image_url': post.image}),
+                "form": NewPost(initial={'content': post.content}),
                 "post": post
             })
     else:
@@ -271,7 +269,7 @@ def new_comment(request, post_id):
     # Redirect to the place where the request came
     return HttpResponseRedirect(request.headers['Referer'])
 
-    
+@csrf_exempt   
 @login_required(login_url=login_view)
 def new_like(request, post_id):
 
@@ -300,7 +298,7 @@ def new_like(request, post_id):
         like.save()
 
     # Redirect to the place where the request came
-    return HttpResponseRedirect(request.headers['Referer'])
+    return JsonResponse({"message": f"Liked post with id {post_id}"}, status=200)
 
 
 @login_required(login_url=login_view)

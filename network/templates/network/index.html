@@ -5,36 +5,13 @@
 {% endblock %}
 
 {% block body %}
+
 <div id="#alert-compose"></div>
+
 {% if user.is_authenticated %}
-    <form action="{% url 'new_post' %}"  method="POST">
-        {% csrf_token %}
-        {% if form.non_field_errors %}
-            <div class="alert alert-danger" role="alert">
-            {% for error in form.non_field_errors %}
-                {{ error }}
-            {% endfor %}
-            </div>
-        {% endif %}
-
-        {% for field in form %}
-            <div class="form-group">
-                {{field}}
-                {% if field.errors %}
-                    {% for error in field.errors %}
-                        <small class="text-danger">
-                            {{ error }}
-                        </small>
-                    {% endfor %}
-                {% endif %}             
-            </div>
-
-        {% endfor %}
-        
-        <div class="form-group">
-            <input class="btn btn-primary" type="submit" value="New Post">
-        </div>
-
+    <form class="post mb-5 mt-3" action="{% url 'new_post' %}"  method="POST">
+        {% include "network/partials/form_fields.html" %}
+        <input class="btn btn-light" type="submit" value="New post">
     </form>
 {% endif %}
 

@@ -1,10 +1,23 @@
 
-    <div class="container-posts">
-        {% for post in page_obj %}
+{% load static %}
 
-       {% include "network/partials/post.html" %}
+    <div class="container-comments">
 
+        {% for comment in page_obj %}
+       <div class="post" id="comment_{{ comment.id }}">
+
+            <div class="post-header d-flex justify-content-between">
+                <a class="post-username" href="{% url 'user_profile' comment.user.username %}">{{ comment.user.username }}</a>
+                <span class="post-date" href="">{{ comment.timestamp }}</span>
+            </div>
+
+            <div class="post-content">
+                {{ comment.content|linebreaks }}
+            </div>
+            
+        </div>
         {% endfor %}
+
     </div>
 
 {% if page_obj.paginator.num_pages > 1 %}

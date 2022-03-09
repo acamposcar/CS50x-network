@@ -1,0 +1,32 @@
+       {% load static %}
+       
+       <div class="post" id="post_{{ post.id }}">
+
+            <div class="post-header d-flex justify-content-between">
+                <a class="post-username" href="{% url 'user_profile' post.user.username %}">{{ post.user.username }}</a>
+                <a class="post-date" href="{% url 'post_view' post.id %}">{{ post.timestamp }}</a>
+            </div>
+
+            <div class="post-content">
+                {{ post.content|linebreaks }}
+            </div>
+
+            <div class="post-footer d-flex justify-content-between">
+                <div class="post-likes">Likes:  {{ post.likes.all.count }}</div> 
+                <div class="post-comments">Comments:  {{ post.comments.all.count }}</div> 
+            </div>
+            
+            {% for user_like in post.users_likes %}
+            <div>{{ user_like.username }}</div>
+            {% endfor %}
+
+            {% if user.is_authenticated %}
+            <form class="post-likes-form">
+                {% if user in post.users_likes %}
+                <input class="post-likes-heart" type="image" src="{% static 'network/icons/heart_red.svg' %}">
+                {% else %}
+                <input class="post-likes-heart" type="image" src="{% static 'network/icons/heart.svg' %}">
+                {% endif %}
+            </form>
+            {% endif %}
+        </div>

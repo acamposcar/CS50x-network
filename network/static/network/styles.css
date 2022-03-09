@@ -1,11 +1,61 @@
-btn-primary {
-  background-color: #b93cb9;
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.container-post {
-  border: thin solid;
-  padding: 10px;
+.btn-light {
+  border-color: #b93cb9;
+  background-color: white;
+}
+.btn-light:hover {
+  border-color: #b93cb9;
+  background-color: #cecaca;
+}
+
+.container {
+  max-width: 650px;
+}
+
+/* POST */
+.post {
+  border: thin solid #dbd7db;
+  border-radius: 10px;
+  padding: 20px;
+  margin: 15px 0;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
+
+.post-header > a {
+  text-decoration: none;
+}
+
+.post-username {
+  font-weight: 600;
+  font-family: Helvetica, sans-serif;
+  color: black;
+}
+
+.post-date {
+  color: grey;
+}
+
+.post-content {
+  margin-bottom: 15px;
   margin-top: 5px;
+}
+
+.post-likes-heart.liked {
+  border-style: solid;
+}
+
+/* FORM */
+textarea.form-control {
+  resize: none;
+  border: none;
+}
+
+input[type=submit] {
+  display: block;
+  margin-left: auto;
 }
 
 /*# sourceMappingURL=styles.css.map */
