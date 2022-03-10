@@ -9,6 +9,7 @@ from django import forms
 from django.core.paginator import Paginator
 from .models import User, Post, Followers, Likes, Comment
 from django.views.decorators.csrf import csrf_exempt
+import json 
 
 class NewPost(forms.Form):
     content = forms.CharField(widget=forms.Textarea(
@@ -51,6 +52,24 @@ def user_posts(request, username):
             "page_obj": page_obj,
             "form": NewPost(),
             })
+
+
+def get_comments(request, post_id):
+    
+    # Query for requested post
+    try:
+        post = Post.objects.get(pk=post_id)
+    except Post.DoesNotExist:
+        return JsonResponse({"error": "Post not found."}, status=404)
+
+    comments = Comment.objects.filter(post=post).order_by('-timestamp')
+
+    # Return post contents
+    if request.method == "GET":
+        return JsonResponse([comment.serialize() for comment in comments], safe=False)
+    else:
+        return JsonResponse({"error": "GET request required."}, status=400)
+
 
 def login_view(request):
     if request.method == "POST":
@@ -241,7 +260,7 @@ def edit_post(request, post_id):
         return JsonResponse({"error": "PUT or GET request required."}, status=400)
     
 
-
+@csrf_exempt   
 @login_required(login_url=login_view)
 def new_comment(request, post_id):
 
@@ -249,27 +268,32 @@ def new_comment(request, post_id):
     if request.method != "POST":
         return JsonResponse({"error": "POST request required."}, status=400)
 
-    form = NewComment(request.POST)
-
     # Query for requested post
     try:
         post = Post.objects.get(pk=post_id)
     except User.DoesNotExist:
         return JsonResponse({"error": f"Post with id {post_id} does not exist."}, status=400)
 
-    if form.is_valid():
-        content = form.cleaned_data["content"]
+    data = json.loads(request.body)
 
-        # Save comment in database
-        comment = Comment(
-            user=request.user,
-            content=content,
-            post = post,
-        )
-        comment.save()
+    # Get contents of email
+    content = data.get("comment", "")
+    if content == [""]:
+        return JsonResponse({
+            "error": "Comment empty."
+        }, status=400)
 
+    # Save comment in database
+    comment = Comment(
+        user=request.user,
+        content=content,
+        post = post,
+    )
+    comment.save()
+
+    comment_count = Comment.objects.filter(post=post).count()
     # Redirect to the place where the request came
-    return HttpResponseRedirect(reverse("post_view", kwargs={"post_id": post_id}))
+    return JsonResponse({"message": f"Created comment", "comment_count": comment_count}, status=200)
 
 @csrf_exempt   
 @login_required(login_url=login_view)

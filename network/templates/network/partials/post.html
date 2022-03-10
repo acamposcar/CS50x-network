@@ -10,8 +10,8 @@
             <div class="post-content">
                 <p>{{ post.content|linebreaks }}</p>
             </div>
-
-            <div class="post-footer d-flex justify-content-between">
+            
+            <div class="post-footer d-flex justify-content-around">
 
                 <!-- Likes form -->
                 <form class="post-likes-form">
@@ -49,41 +49,27 @@
                 </form>
 
                 <!-- Comments -->
-                <div class="post-comments-button">
+                <div class="post-comments-button d-flex gap-1">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-message-circle"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
-                     {{ post.comments.all.count }}</div> 
+                    <div class="post-comment-count">{{ post.comments.all.count }}</div> 
                 </div>
-
-            
-
+            </div>
             <div class="post-comments">
-
+                
                 {% if user.is_authenticated %}
-                    <form class="post mb-4 mt-2" action="{% url 'new_comment' post.id %}"  method="POST">
+                    <form class="post-comment-form mb-4 mt-2">
                         {% include "network/partials/form_fields.html" with form=comment_form %}
                         <input class="btn btn-light" type="submit" value="New comment">
                     </form>
                 {% endif %}
 
                 <div class="container-comments">
-                    
-                    
-                    {% for comment in post.last_comments %}
-                <div class="comment" id="comment_{{ comment.id }}">
-
-                        <div class="post-header d-flex justify-content-between">
-                            <a class="post-username" href="{% url 'user_profile' comment.user.username %}">{{ comment.user.username }}</a>
-                            <span class="post-date" href="">{{ comment.timestamp }}</span>
-                        </div>
-
-                        <div class="post-content">
-                            {{ comment.content|linebreaks }}
-                        </div>
-                        
-                    </div>
-                    
-                    {% endfor %}
-
+                        <!-- Updated using JS -->
+                </div>
+                <div class="post-comment-more d-flex justify-content-center">
+                    <a href="{% url 'post_view' post.id %}">
+                        <button class="btn btn-primary">View more comments</button>  
+                    </a>
                 </div>
 
             </div>

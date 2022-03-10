@@ -33,6 +33,14 @@ class Comment(models.Model):
     content = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
 
+    def serialize(self):
+        return {
+            "id": self.id,
+            "user": self.user.username,
+            "post": self.post.id,
+            "content": self.content,
+            "timestamp": self.timestamp.strftime("%b %d %Y, %I:%M %p"),
+        }
     def __str__(self):
         return f"Comment [{self.id}] made by {self.user.username} on {self.timestamp.strftime('%d %b %Y %H:%M:%S')}"
 

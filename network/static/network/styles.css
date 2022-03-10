@@ -16,7 +16,7 @@ body {
 }
 
 /* POST */
-.post, .comment {
+.post, .comment, .post-comment-form {
   border: thin solid #dbd7db;
   border-radius: 10px;
   padding: 20px;
@@ -68,6 +68,16 @@ body {
 }
 
 .post-comments {
+  transition: max-height 1s ease-out;
+  max-height: 0;
+  overflow: hidden;
+}
+
+.post-comments.active {
+  max-height: 1500px;
+}
+
+.post-comment-more {
   display: none;
 }
 
