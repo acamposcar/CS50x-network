@@ -16,7 +16,7 @@ class NewPost(forms.Form):
 
 class NewComment(forms.Form):
     content = forms.CharField(widget=forms.Textarea(
-        attrs={"placeholder": "Send your answer", "rows":3, "class":"form-control"}), required=True)
+        attrs={"placeholder": "Send your answer", "rows":1, "class":"form-control"}), required=True)
 
 
 def index(request):
@@ -29,7 +29,8 @@ def index(request):
 
     return render(request, "network/index.html", {
             "page_obj": page_obj,
-            "form": NewPost(),
+            "post_form": NewPost(),
+            "comment_form": NewComment()
             })
 
 def user_posts(request, username):
@@ -91,7 +92,8 @@ def following_posts(request, username):
 
     return render(request, "network/index.html", {
             "page_obj": page_obj,
-            "form": NewPost(),
+            "post_form": NewPost(),
+            "comment_form": NewComment()
             })
             
 
@@ -267,7 +269,7 @@ def new_comment(request, post_id):
         comment.save()
 
     # Redirect to the place where the request came
-    return HttpResponseRedirect(request.headers['Referer'])
+    return HttpResponseRedirect(reverse("post_view", kwargs={"post_id": post_id}))
 
 @csrf_exempt   
 @login_required(login_url=login_view)
@@ -283,7 +285,7 @@ def new_like(request, post_id):
     except User.DoesNotExist:
         return JsonResponse({"error": f"Post with id {post_id} does not exist."}, status=400)
 
-    # Query for requested like
+    # Query for like by current user
     like = Likes.objects.filter(user=request.user, post=post)
 
     if like.exists():
@@ -297,8 +299,11 @@ def new_like(request, post_id):
             )
         like.save()
 
+    # Query for like count for current post
+    like_count = Likes.objects.filter(post=post).count()
+
     # Redirect to the place where the request came
-    return JsonResponse({"message": f"Liked post with id {post_id}"}, status=200)
+    return JsonResponse({"message": f"Liked post with id {post_id}", "like_count": like_count}, status=200)
 
 
 @login_required(login_url=login_view)

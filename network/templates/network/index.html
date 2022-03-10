@@ -10,7 +10,7 @@
 
 {% if user.is_authenticated %}
     <form class="post mb-5 mt-3" action="{% url 'new_post' %}"  method="POST">
-        {% include "network/partials/form_fields.html" %}
+        {% include "network/partials/form_fields.html" with form=post_form %}
         <input class="btn btn-light" type="submit" value="New post">
     </form>
 {% endif %}

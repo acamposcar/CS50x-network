@@ -21,7 +21,7 @@ body{
 
 /* POST */
 
-.post{
+.post, .comment{
     border: thin solid $border-color;
     border-radius: 10px;
     padding: 20px;
@@ -37,11 +37,11 @@ body{
 .post-username {
     font-weight: 600;
     font-family: Helvetica, sans-serif;
-    color: black
+    color: black;
 }
 
 .post-date {
-    color: grey
+    color: grey;
 }
 
 .post-content{
@@ -49,9 +49,34 @@ body{
     margin-top: 5px;
 }
 
-.post-likes-heart.liked{
-    border-style: solid;
+.post-like-button{
+    border: none;
+    background-color: white;
 }
+
+.post-like-heart{
+    fill:none;
+    stroke: black;
+}
+
+.post-like-heart:hover{
+    fill: none;
+    stroke: red;
+}
+
+.post-like-heart.liked{
+    fill:red;
+    stroke: red;
+}
+
+.post-comments-button{
+    cursor: pointer;
+}
+
+.post-comments{
+    display: none;
+}
+
 
 /* FORM */
 

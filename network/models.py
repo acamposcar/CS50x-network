@@ -19,6 +19,10 @@ class Post(models.Model):
 
         return User.objects.filter(id__in = user_likes_list)
 
+    def last_comments(self):
+
+        return Comment.objects.filter(post=self).order_by('-timestamp')[:3]
+
     def __str__(self):
         return f"Post [{self.id}] made by {self.user.username} on {self.timestamp.strftime('%d %b %Y %H:%M:%S') }"
 
