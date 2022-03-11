@@ -262,6 +262,30 @@ def edit_post(request, post_id):
 
 @csrf_exempt   
 @login_required(login_url=login_view)
+def delete_post(request, post_id):
+    # Query current post
+    try:
+        post = Post.objects.get(pk=post_id)
+    except Post.DoesNotExist:
+        return JsonResponse({"error": "Post not found."}, status=404)
+
+    # Request user must be the same as post author to be able to edit the post
+    if request.user != post.user:
+        return JsonResponse({"error": "Forbidden."}, status=403)
+
+    # Edit post must be via PUT
+    if request.method == "DELETE":
+        
+        # Delete post
+        post.delete()
+
+        return JsonResponse({"message": f"Post deleted"}, status=200)
+    
+    else:
+        return JsonResponse({"error": "DELETE request required."}, status=400)
+
+@csrf_exempt   
+@login_required(login_url=login_view)
 def new_comment(request, post_id):
 
     # Creating a new comment must be via POST

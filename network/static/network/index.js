@@ -63,6 +63,24 @@ function createCommentContainer(comment, post){
     `;
 }
 
+function deletePost(post) {
+  /*----------------
+  Send email (POST)
+  ----------------*/
+  fetch(`/api/posts/${post.id.substr(5)}/delete`, {
+    method: 'DELETE',})
+    .then((response) => response.json())
+    .then((result) => {
+      if (result.error) {
+        //console.log(result)
+      } else { 
+
+        // Hide post
+        post.style.display = 'none'
+
+      }
+    });
+}
 
 function editPost(post, editPopup) {
   /*----------------
@@ -168,6 +186,11 @@ function updateLikePost(post){
   if ( post.querySelector('.post-edit-button') !== null) {
       post.querySelector('.post-edit-button').onclick = () => {
         showEditPopup(post);
+      };
+  }
+  if ( post.querySelector('.post-delete-button') !== null) {
+      post.querySelector('.post-delete-button').onclick = () => {
+        deletePost(post);
       };
   }
   

@@ -2,11 +2,30 @@
        
        <div class="post" id="post_{{ post.id }}">
             
-            <div class="post-header d-flex justify-content-between">
+            <div class="post-header d-flex align-items-baseline gap-3">
                 <a class="post-username" href="{% url 'user_profile' post.user.username %}">{{ post.user.username }}</a>
                 <a class="post-date" href="{% url 'post_view' post.id %}">{{ post.timestamp }}</a>
                 {% if user == post.user %}
-                <button class="btn btn-primary post-edit-button">Edit</button>
+
+                    <div class="dropdown ms-auto">
+                        <div type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img width="16" height="16" src="{% static 'network/icons/more-vertical.svg' %}" alt="Vertical Menu">
+                        </div>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                            <li>
+                                <div class="dropdown-item post-edit-button">
+                                    <img width="14" height="14" src="{% static 'network/icons/edit.svg' %}" alt="Edit Post">
+                                    <span>Edit</span>    
+                                </div>
+                            </li>
+                            <li>
+                                <div class="dropdown-item post-delete-button" href="#">
+                                    <img width="14" height="14" src="{% static 'network/icons/trash-2.svg' %}" alt="Delete Post">
+                                    <span>Delete</span> 
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
                 {% endif %}
             </div>
 
