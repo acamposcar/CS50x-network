@@ -57,12 +57,67 @@ function createCommentContainer(comment, post){
                             <span class="post-date" href="">${comment.timestamp}</span>
                         </div>
                         <div class="post-content">
-                            ${comment.content}
+                            ${comment.content.replace(/(\r\n|\n|\r)/g,"<br />")}
                         </div>
                       </div>
     `;
-
 }
+
+
+function editPost(post, editPopup) {
+  /*----------------
+  Send email (POST)
+  ----------------*/
+  content = editPopup.querySelector('#id_content').value.trim();
+  fetch(`/api/posts/${post.id.substr(5)}/edit`, {
+    method: 'POST',
+    body: JSON.stringify({
+      content: content,
+    }),
+  })
+    .then((response) => response.json())
+    .then((result) => {
+      if (result.error) {
+        //console.log(result)
+      } else { 
+        // Clear text from form
+        
+
+        // Hide popup and clear edit form content
+        editPopup.style.display = 'none';
+        editPopup.querySelector('#id_content').value = "";
+
+        // Update post to show the new one
+        post.querySelector('.post-content').innerText = content
+        
+
+      }
+    });
+}
+
+function cancelEditPopup(editPopup){
+
+  editPopup.querySelector('#id_content').value = "";
+  editPopup.style.display = 'none';
+}
+
+function showEditPopup(post){
+  postContent = post.querySelector('.post-content').innerText.trim();
+  editPopup = document.querySelector('.edit-popup');
+  editPopup.querySelector('#id_content').value = postContent;
+  editPopup.style.display = 'block';
+  console.log(editPopup)
+  editPopup.onsubmit = () => {
+    editPost(post, editPopup);
+    return false;
+  };
+
+  editPopup.querySelector('.cancel-edit-button').onclick = () => {
+    cancelEditPopup(editPopup);
+
+  };
+}
+
 
 function getComments(post){
     fetch(`/api/posts/${post.id.substr(5)}/comments`)
@@ -107,9 +162,15 @@ function updateLikePost(post){
     getComments(post);
     post.querySelector('.post-comments').classList.toggle('active');
 
-
   };
-
+  
+  // Show edit popup if the edit button exists (only is current user is the post author)
+  if ( post.querySelector('.post-edit-button') !== null) {
+      post.querySelector('.post-edit-button').onclick = () => {
+        showEditPopup(post);
+      };
+  }
+  
 }
 
 

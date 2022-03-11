@@ -87,6 +87,27 @@ body{
     display: none;
 }
 
+
+/* EDIT POPUP */
+
+.edit-popup {
+  display: none;
+  position: fixed;
+  left: 50%;
+  width: 600px;
+  margin-left: -300px;
+  top: 30%;
+  margin-top: -100px;
+  background: #FFF;
+  z-index: 20;
+  -webkit-box-shadow:  0px 0px 0px 9999px rgba(0, 0, 0, 0.8);
+  box-shadow:  0px 0px 0px 9999px rgba(0, 0, 0, 0.8);
+}
+
+.edit-popup textarea{
+    height: 200px;
+}
+
 /* FORM */
 
 textarea.form-control {

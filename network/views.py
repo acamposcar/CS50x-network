@@ -13,11 +13,11 @@ import json
 
 class NewPost(forms.Form):
     content = forms.CharField(widget=forms.Textarea(
-        attrs={'autofocus': 'autofocus', "placeholder": "¿What is going on?", "rows":3, "class":"form-control"}), required=True)   
+        attrs={'autofocus': 'autofocus', "placeholder": "¿What is going on?", "rows":3, "class":"form-control"}), required=True, max_length=500)   
 
 class NewComment(forms.Form):
     content = forms.CharField(widget=forms.Textarea(
-        attrs={"placeholder": "Send your answer", "rows":1, "class":"form-control"}), required=True)
+        attrs={"placeholder": "Send your answer", "rows":2, "class":"form-control"}), required=True, max_length=500)
 
 
 def index(request):
@@ -31,7 +31,7 @@ def index(request):
     return render(request, "network/index.html", {
             "page_obj": page_obj,
             "post_form": NewPost(),
-            "comment_form": NewComment()
+            "comment_form": NewComment(),
             })
 
 def user_posts(request, username):
@@ -224,6 +224,7 @@ def new_post(request):
 
     return HttpResponseRedirect(reverse("index"))
 
+@csrf_exempt   
 @login_required(login_url=login_view)
 def edit_post(request, post_id):
     # Query current post
@@ -239,25 +240,24 @@ def edit_post(request, post_id):
     # Edit post must be via PUT
     if request.method == "POST":
         
-        form = NewPost(request.POST)
+        data = json.loads(request.body)
 
-        if form.is_valid():
-            content = form.cleaned_data["content"]
+        # Get contents of email
+        content = data.get("content", "")
 
-            # Update post
-            post.content = content
-            post.save()
+        if content == [""]:
+            return JsonResponse({
+                "error": "Post empty."
+            }, status=400)
 
-        return HttpResponseRedirect(reverse("post_view", kwargs={"post_id": post_id}))
+        # Update post
+        post.content = content
+        post.save()
+
+        return JsonResponse({"message": f"Post edited"}, status=200)
     
-    elif request.method == 'GET':
-
-        return render(request, "network/edit.html", {
-                "form": NewPost(initial={'content': post.content}),
-                "post": post
-            })
     else:
-        return JsonResponse({"error": "PUT or GET request required."}, status=400)
+        return JsonResponse({"error": "PUT request required."}, status=400)
     
 
 @csrf_exempt   

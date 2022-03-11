@@ -1,14 +1,17 @@
        {% load static %}
        
        <div class="post" id="post_{{ post.id }}">
-
+            
             <div class="post-header d-flex justify-content-between">
                 <a class="post-username" href="{% url 'user_profile' post.user.username %}">{{ post.user.username }}</a>
                 <a class="post-date" href="{% url 'post_view' post.id %}">{{ post.timestamp }}</a>
+                {% if user == post.user %}
+                <button class="btn btn-primary post-edit-button">Edit</button>
+                {% endif %}
             </div>
 
             <div class="post-content">
-                <p>{{ post.content|linebreaks }}</p>
+                {{ post.content|linebreaks }}
             </div>
             
             <div class="post-footer d-flex justify-content-around">
