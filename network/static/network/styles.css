@@ -24,7 +24,7 @@ body {
   box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 }
 
-.post-header > a {
+a {
   text-decoration: none;
 }
 
@@ -86,14 +86,11 @@ body {
 }
 
 /* EDIT POPUP */
-.edit-popup {
+.popup {
   display: none;
   position: fixed;
-  left: 50%;
-  width: 600px;
-  margin-left: -300px;
+  margin-left: -10px;
   top: 30%;
-  margin-top: -100px;
   background: #FFF;
   z-index: 20;
   -webkit-box-shadow: 0px 0px 0px 9999px rgba(0, 0, 0, 0.8);
@@ -113,6 +110,21 @@ textarea.form-control {
 input[type=submit] {
   display: block;
   margin-left: auto;
+}
+
+/* PROFILE */
+.circle {
+  background: #d08bc4;
+  border-radius: 1em;
+  -moz-border-radius: 1em;
+  -webkit-border-radius: 1em;
+  color: #ffffff;
+  display: inline-block;
+  font-weight: bold;
+  line-height: 2em;
+  margin-right: 5px;
+  text-align: center;
+  width: 2em;
 }
 
 /*# sourceMappingURL=styles.css.map */

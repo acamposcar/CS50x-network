@@ -2,9 +2,13 @@
        
        <div class="post" id="post_{{ post.id }}">
             
-            <div class="post-header d-flex align-items-baseline gap-3">
-                <a class="post-username" href="{% url 'user_profile' post.user.username %}">{{ post.user.username }}</a>
-                <a class="post-date" href="{% url 'post_view' post.id %}">{{ post.timestamp }}</a>
+                <div class="post-header d-flex align-items-center gap-1 user-avatar">
+                    <svg class='avatar' xmlns="http://www.w3.org/2000/svg" height="45px" viewBox="0 0 24 24" width="45px" fill="white"><path d="M0 0h24v24H0z" fill="none"/><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg>                
+                    <div class="d-flex align-items-baseline gap-3">
+                        <a class="post-username" href="{% url 'user_profile' post.user.username %}">{{ post.user.username }}</a>
+                        <a class="post-date" href="{% url 'post_view' post.id %}">{{ post.timestamp }}</a>
+                    </div>                    
+                
                 {% if user == post.user %}
 
                     <div class="dropdown ms-auto">
@@ -88,18 +92,15 @@
                 <div class="container-comments">
                         <!-- Updated using JS -->
                 </div>
-                <div class="post-comment-more d-flex justify-content-center">
+                
+                <div class="d-flex justify-content-center">
                     <a href="{% url 'post_view' post.id %}">
-                        <button class="btn btn-primary">View more comments</button>  
+                        <button class="post-comment-more btn btn-primary">View more comments</button>  
                     </a>
                 </div>
 
             </div>
 
         </div>
-<!--             {% for user_like in post.users_likes %}
-            <div>{{ user_like.username }}</div>
-            {% endfor %} -->
-
 
         

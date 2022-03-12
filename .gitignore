@@ -1,5 +1,11 @@
 notes.json
 
+# ESLint
+node_modules
+package-lock.json
+package.json
+.eslintrc.json
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

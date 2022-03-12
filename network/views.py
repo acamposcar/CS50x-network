@@ -133,7 +133,7 @@ def post_view(request, post_id):
     return render(request, "network/post.html", {
             "post": post,
             "page_obj": page_obj,
-            "form": NewComment(),
+            "comment_form": NewComment()
             })
 
 def user_profile(request, username):
@@ -167,7 +167,9 @@ def user_profile(request, username):
             "profile_user": profile_user,
             "page_obj": page_obj,
             'users_following': following_user_list,
-            'users_followers': followers_user_list
+            'users_followers': followers_user_list,
+            "comment_form": NewComment()
+
             })
 
 
