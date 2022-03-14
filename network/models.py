@@ -16,11 +16,9 @@ class Post(models.Model):
 
     def users_likes(self):
         user_likes_list = Likes.objects.filter(post=self).values_list('user')
-
         return User.objects.filter(id__in = user_likes_list)
 
     def last_comments(self):
-
         return Comment.objects.filter(post=self).order_by('-timestamp')[:3]
 
     def __str__(self):

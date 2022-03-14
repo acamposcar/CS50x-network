@@ -1,7 +1,8 @@
 {% extends "network/layout.html" %} {% load static %}
 
 {% block script %}
-    <script src="{% static 'network/index.js' %}"></script>
+    <script type="module" src="{% static 'network/main.js' %}"></script>
+    <script type="module" src="{% static 'network/post.js' %}"></script>
 {% endblock %}
 
 {% block body %}
@@ -9,15 +10,4 @@
 
 {% include "network/partials/post.html" %}
 
-<div class="post mt-5">
-    {% if user.is_authenticated %}
-        <form class="post mb-4 mt-2" action="{% url 'comments' post.id %}"  method="POST">
-            {% include "network/partials/form_fields.html" with form=comment_form %}
-            <input class="btn btn-light" type="submit" value="New comment">
-        </form>
-    {% endif %}
-
-
-    {% include "network/partials/comments.html" %}
-</div>
 {% endblock %}

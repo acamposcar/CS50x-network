@@ -1,14 +1,14 @@
 {% extends "network/layout.html" %} {% load static %}
 
 {% block script %}
-    <script src="{% static 'network/index.js' %}"></script>
+    <script type="module" src="{% static 'network/main.js' %}"></script>
 {% endblock %}
 
 {% block body %}
 
 <div id="#alert-compose"></div>
 
-{% if user.is_authenticated %}
+{% if user.is_authenticated and post_form %}
     <form class="post mb-5 mt-3" action="{% url 'new_post' %}"  method="POST">
         {% include "network/partials/form_fields.html" with form=post_form %}
         <input class="btn btn-light" type="submit" value="New post">
