@@ -8,9 +8,8 @@ from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.views.decorators.csrf import csrf_exempt
 from .forms import NewPost, NewComment
-from .models import User, Post, Followers, Likes, Comment
+from .models import User, Post, Followers
 from .utils import get_post, edit_post, delete_post, like_post, get_comments, create_comment, get_user, follow_user
-import json 
 
 
 def index(request):
@@ -28,7 +27,6 @@ def index(request):
             })
 
 
-@csrf_exempt
 def post(request, post_id):
 
     # Query for requested post
@@ -52,8 +50,7 @@ def post(request, post_id):
     else:
         return JsonResponse({"error": "Method not allowed."}, status=400)
 
-
-@csrf_exempt   
+ 
 def comments(request, post_id):
     
     # Query for requested post
@@ -129,7 +126,6 @@ def following_posts(request, username):
 
     return render(request, "network/index.html", {
             "page_obj": posts_page_obj,
-            "post_form": NewPost(),
             "comment_form": NewComment()
             })
             
