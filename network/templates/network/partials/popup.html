@@ -1,0 +1,21 @@
+<form class="container edit-popup popup post mb-5 mt-3">
+    {% include "network/partials/form_fields.html" with form=post_form %}
+    
+    <div class="d-flex justify-content-between">
+        <div class="btn btn-light cancel-edit-button">Cancel</div>
+        <input class="btn btn-info" type="submit" value="Edit post">
+    </div>
+
+</form>
+
+<form class="container delete-popup popup post mb-5 mt-3">  
+    <h5 class="d-flex justify-content-center">Do you want to delete the post?</h5>
+    <p class="d-flex justify-content-center" >This action cannot be reversed</p>          
+    <div class="d-flex justify-content-between">
+        
+        <div class="btn btn-light cancel-delete-button">Cancel</div>
+            
+        <input class="btn btn-danger" type="submit" value="Delete post">
+    </div>
+
+</form>
