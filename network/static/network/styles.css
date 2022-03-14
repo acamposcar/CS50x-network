@@ -1,18 +1,39 @@
 body {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f7f7f7;
 }
 
 .btn-light {
-  border-color: #b93cb9;
+  border-color: #ffcc00;
   background-color: white;
+  border-width: 1.5px;
+  font-size: 0.9rem;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 }
 .btn-light:hover {
-  border-color: #b93cb9;
-  background-color: #cecaca;
+  border-color: #fff7e9;
+  background-color: #fcefba;
+}
+
+a {
+  color: #aa8800;
+}
+
+a:hover {
+  color: rgba(53, 52, 40, 0.904);
 }
 
 .container {
   max-width: 650px;
+}
+
+/* NAVBAR */
+nav {
+  background-color: white;
+}
+
+.nav-link.active {
+  font-weight: 500;
 }
 
 /* POST */
@@ -22,16 +43,29 @@ body {
   padding: 20px;
   margin: 15px 0;
   box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+  background-color: #FFF;
 }
 
 a {
   text-decoration: none;
 }
 
-.post-username {
+.post-image {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  border-radius: 45px;
+}
+
+.post-name {
   font-weight: 600;
   font-family: Helvetica, sans-serif;
   color: black;
+}
+
+.post-username {
+  font-family: Helvetica, sans-serif;
+  color: grey;
 }
 
 .post-date {
@@ -39,8 +73,8 @@ a {
 }
 
 .post-content {
-  margin-bottom: 15px;
-  margin-top: 5px;
+  margin-bottom: 30px;
+  margin-top: 15px;
 }
 
 .post-like-button {
@@ -48,19 +82,22 @@ a {
   background-color: white;
 }
 
-.post-like-heart {
+.post-like-heart, .post-comment-icon {
   fill: none;
-  stroke: black;
+  stroke: grey;
+  stroke-width: 1;
+  width: 20px;
+  height: 20px;
 }
 
 .post-like-heart:hover {
   fill: none;
-  stroke: red;
+  stroke: #e90e2b;
 }
 
 .post-like-heart.liked {
-  fill: red;
-  stroke: red;
+  fill: #e90e2b;
+  stroke: #e90e2b;
 }
 
 .post-comments-button {
@@ -81,8 +118,25 @@ a {
   display: none;
 }
 
+.post-like-count, .post-comment-count {
+  font-size: 14px;
+  color: grey;
+}
+
 .dropdown-item {
   cursor: pointer;
+}
+
+.comment-content {
+  margin-bottom: 15px;
+  margin-top: 15px;
+}
+
+.comment-image {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  border-radius: 40px;
 }
 
 /* EDIT POPUP */
@@ -113,18 +167,40 @@ input[type=submit] {
 }
 
 /* PROFILE */
-.circle {
-  background: #d08bc4;
-  border-radius: 1em;
-  -moz-border-radius: 1em;
-  -webkit-border-radius: 1em;
-  color: #ffffff;
-  display: inline-block;
-  font-weight: bold;
-  line-height: 2em;
-  margin-right: 5px;
+.profile {
+  background-color: white;
+  padding-top: 30px;
+  padding-bottom: 8px;
+  margin-top: 20px;
+  margin-bottom: 30px;
+  border-bottom: thin solid #dbd7db;
+  border-top: thin solid #dbd7db;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
+
+.profile-image {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 20px;
+}
+
+.profile-name {
+  font-size: 24px;
+  font-family: Helvetica, sans-serif;
+}
+
+.profile-follower-info {
+  border-top: thin solid #dbd7db;
+}
+
+.profile-followers-group {
   text-align: center;
-  width: 2em;
+}
+
+.profile-followers-count {
+  font-weight: 700;
+  font-size: 20px;
 }
 
 /*# sourceMappingURL=styles.css.map */

@@ -34,7 +34,10 @@ class Comment(models.Model):
     def serialize(self):
         return {
             "id": self.id,
-            "user": self.user.username,
+            "username": self.user.username,
+            "profile_image": self.user.profile_image,
+            "first_name": self.user.first_name,
+            "last_name": self.user.last_name,
             "post": self.post.id,
             "content": self.content,
             "timestamp": self.timestamp.strftime("%b %d %Y, %I:%M %p"),

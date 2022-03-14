@@ -137,17 +137,27 @@ def get_user(request, profile_user):
 
     # Return user posts in reverse chronological order
     posts = Post.objects.filter(user=profile_user).order_by("-timestamp").all()
-    
+    post_count = posts.count()
+
     post_paginator = Paginator(posts, 10)
     post_page_number = request.GET.get('page')
     post_page_obj = post_paginator.get_page(post_page_number)
+
+    # Active item in navbar
+    if profile_user == request.user:
+        active ='profile'
+    else:
+        active = ""
 
     return render(request, "network/profile.html",{
             "profile_user": profile_user,
             "page_obj": post_page_obj,
             'users_following': following_user_list,
             'users_followers': followers_user_list,
-            "comment_form": CommentForm()
+            "comment_form": CommentForm(),
+            "post_form": PostForm(),
+            "post_count": post_count,
+            "active": active,
 
             })
 

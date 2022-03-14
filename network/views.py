@@ -24,6 +24,7 @@ def index(request):
             "page_obj": posts_page_obj,
             "post_form": PostForm(),
             "comment_form": CommentForm(),
+            "active": 'home',
             })
 
 
@@ -103,7 +104,9 @@ def login_view(request):
                 "message": "Invalid username and/or password."
             })
     else:
-        return render(request, "network/login.html")
+        return render(request, "network/login.html", {
+            "active": 'login',
+            })
 
         
 @login_required(login_url=login_view)
@@ -126,7 +129,8 @@ def following_posts(request, username):
 
     return render(request, "network/index.html", {
             "page_obj": posts_page_obj,
-            "comment_form": CommentForm()
+            "comment_form": CommentForm(),
+            "active": 'following',
             })
             
 @login_required(login_url=login_view)
@@ -177,7 +181,9 @@ def register(request):
         login(request, user)
         return HttpResponseRedirect(reverse("index"))
     else:
-        return render(request, "network/register.html")
+        return render(request, "network/register.html", {
+            "active": 'register',
+            })
 
 
 

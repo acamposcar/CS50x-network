@@ -2,15 +2,25 @@ export function createCommentContainer(comment, post) {
   const container = post.querySelector('.container-comments');
   container.innerHTML += `
                       <div class="comment" id="comment_${comment.id}">
-                        <div class="post-header d-flex justify-content-between">
-                            <a class="post-username" href="{% url 'user_profile' ${comment.user} %}">${comment.user}</a>
-                            <span class="post-date" href="">${comment.timestamp}</span>
-                        </div>
-                        <div class="post-content">${comment.content.replace(/(\r\n|\n|\r)/g, '<br />')}
+                        <div class="post-header d-flex align-items-center gap-2 user-avatar">
+                           <img class="comment-image" src="${ comment.profile_image }" alt="Profile Image">
+                           <div>
+                              <div class="d-flex align-items-baseline gap-1">
+                                <a class="post-name" href="/users/${comment.username}">${comment.first_name} ${ comment.last_name }</a>
+                                <a class="post-username" href="/users/${comment.username}"><small>@${ comment.username }</small></a>
+                                
+                              </div>
+                              <span class="post-date"><small>${ comment.timestamp }</small></span>
+                            </div>  
+                         </div>  
+                        <div class="comment-content">
+                          ${comment.content.replace(/(\r\n|\n|\r)/g, '<br />')}
                         </div>
                       </div>
     `;
 }
+
+
 
 export function avatarChangeColor(name) {
   /**

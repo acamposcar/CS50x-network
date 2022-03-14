@@ -19,7 +19,12 @@ export function updateLike(post) {
       if (result.error) {
         console.log(result);
       } else {
-        post.querySelector('.post-like-count').textContent = result.like_count;
+
+        if (result.like_count === 1) {
+          post.querySelector('.post-like-count').textContent = `${result.like_count} Like`;
+        } else {
+          post.querySelector('.post-like-count').textContent = `${result.like_count} Likes`;
+        }
         post.querySelector('.post-like-heart').classList.toggle('liked');
       }
     });
@@ -35,7 +40,7 @@ export function createComment(post) {
     method: 'POST',
     headers: { 'X-CSRFToken': csrftoken },
     body: JSON.stringify({
-      comment: post.querySelector('#id_content').value,
+      comment: post.querySelector('#id_content').value.trim(),
     }),
   })
     .then((response) => response.json())
@@ -47,7 +52,12 @@ export function createComment(post) {
         post.querySelector('#id_content').value = '';
 
         // Update comments count
-        post.querySelector('.post-comment-count').textContent = result.comment_count;
+        if (result.comment_count === 1) {
+          post.querySelector('.post-comment-count').textContent = `${result.comment_count} Comment`;
+        } else {
+          post.querySelector('.post-comment-count').textContent = `${result.comment_count} Comments`;
+        }
+        
 
         // Update all comments to show the new one
         getComments(post);

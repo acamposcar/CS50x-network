@@ -1,22 +1,42 @@
-$primary-color: rgb(185, 60, 185);
+$primary-color: rgb(255, 247, 233);
 $border-color: rgb(219, 215, 219);
 
 body{
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: rgb(247, 247, 247);
 }
 
 .btn-light{
-    border-color: $primary-color;
+    border-color: rgb(255, 204, 0);
     background-color: white;
+    border-width: 1.5px;
+    font-size: 0.9rem;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 
     &:hover{
         border-color: $primary-color;
-        background-color: rgb(206, 202, 202);
+        background-color: rgb(252, 239, 186);
     }
 }
 
+a{
+    color: rgb(170, 136, 0);
+}
+a:hover{
+    color: rgba(53, 52, 40, 0.904);
+}
 .container{
     max-width: 650px;
+}
+
+
+/* NAVBAR */
+nav{
+    background-color: white;
+
+}
+.nav-link.active {
+	font-weight: 500;
 }
 
 /* POST */
@@ -26,7 +46,8 @@ body{
     border-radius: 10px;
     padding: 20px;
     margin: 15px 0;
-    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    background-color: #FFF;
 }
 
 a {
@@ -34,10 +55,21 @@ a {
 
 }
 
-.post-username {
+.post-image{
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 45px;
+}
+.post-name {
     font-weight: 600;
     font-family: Helvetica, sans-serif;
     color: black;
+}
+
+.post-username {
+    font-family: Helvetica, sans-serif;
+    color: grey;
 }
 
 .post-date {
@@ -45,8 +77,8 @@ a {
 }
 
 .post-content{
-    margin-bottom: 15px;
-    margin-top: 5px;
+    margin-bottom: 30px;
+    margin-top: 15px;
 }
 
 .post-like-button{
@@ -54,19 +86,22 @@ a {
     background-color: white;
 }
 
-.post-like-heart{
+.post-like-heart, .post-comment-icon{
     fill:none;
-    stroke: black;
+    stroke: grey;
+    stroke-width: 1;
+    width: 20px;
+    height: 20px;
 }
 
 .post-like-heart:hover{
     fill: none;
-    stroke: red;
+    stroke: rgb(233, 14, 43);
 }
 
 .post-like-heart.liked{
-    fill:red;
-    stroke: red;
+    fill:rgb(233, 14, 43);
+    stroke: rgb(233, 14, 43);
 }
 
 .post-comments-button{
@@ -87,8 +122,26 @@ a {
     display: none;
 }
 
+.post-like-count, .post-comment-count{
+    font-size: 14px;
+    color:grey;
+
+}
 .dropdown-item{
     cursor: pointer;
+}
+
+.comment-content{
+    margin-bottom: 15px;
+    margin-top: 15px;
+}
+
+.comment-image{
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+    border-radius: 40px;
+
 }
 /* EDIT POPUP */
 
@@ -112,6 +165,7 @@ a {
 textarea.form-control {
   resize: none;
   border: none;
+  
 }
 
 input[type=submit]{
@@ -122,16 +176,38 @@ input[type=submit]{
 
 /* PROFILE */
 
-.circle {
-  background: rgb(208, 139, 196);
-  border-radius: 1em;
-  -moz-border-radius: 1em;
-  -webkit-border-radius: 1em;
-  color: #ffffff;
-  display: inline-block;
-  font-weight: bold;
-  line-height: 2em;
-  margin-right: 5px;
-  text-align: center;
-  width: 2em; 
+.profile{
+    background-color: white;
+    padding-top: 30px;
+    padding-bottom: 8px;
+    margin-top: 20px;
+    margin-bottom: 30px;
+    border-bottom: thin solid $border-color;
+    border-top: thin solid $border-color;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
+
+.profile-image{
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 20px;
+}
+
+.profile-name{
+    font-size: 24px;
+    font-family: Helvetica, sans-serif;
+}
+
+.profile-follower-info{
+    border-top: thin solid $border-color;
+}
+
+.profile-followers-group{
+    text-align: center;
+}
+
+.profile-followers-count{
+    font-weight: 700;
+    font-size: 20px;
 }
