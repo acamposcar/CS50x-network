@@ -3,7 +3,7 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from django.http import HttpResponseRedirect
 
-from .forms import NewComment
+from .forms import CommentForm, PostForm
 from .models import User, Post, Followers, Likes, Comment
 
 import json 
@@ -26,7 +26,8 @@ def get_post(request, post):
     return render(request, "network/post.html", {
             "post": post,
             "page_obj": comments_page_obj,
-            "comment_form": NewComment()
+            "comment_form": CommentForm(),
+            "post_form": PostForm(),
             })
 
 
@@ -146,7 +147,7 @@ def get_user(request, profile_user):
             "page_obj": post_page_obj,
             'users_following': following_user_list,
             'users_followers': followers_user_list,
-            "comment_form": NewComment()
+            "comment_form": CommentForm()
 
             })
 

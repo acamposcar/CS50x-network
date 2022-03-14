@@ -7,7 +7,7 @@ from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.views.decorators.csrf import csrf_exempt
-from .forms import NewPost, NewComment
+from .forms import PostForm, CommentForm
 from .models import User, Post, Followers
 from .utils import get_post, edit_post, delete_post, like_post, get_comments, create_comment, get_user, follow_user
 
@@ -22,8 +22,8 @@ def index(request):
 
     return render(request, "network/index.html", {
             "page_obj": posts_page_obj,
-            "post_form": NewPost(),
-            "comment_form": NewComment(),
+            "post_form": PostForm(),
+            "comment_form": CommentForm(),
             })
 
 
@@ -126,7 +126,7 @@ def following_posts(request, username):
 
     return render(request, "network/index.html", {
             "page_obj": posts_page_obj,
-            "comment_form": NewComment()
+            "comment_form": CommentForm()
             })
             
 @login_required(login_url=login_view)
@@ -136,7 +136,7 @@ def new_post(request):
     if request.method != "POST":
         return JsonResponse({"error": "POST request required."}, status=400)
 
-    form = NewPost(request.POST)
+    form = PostForm(request.POST)
 
     if form.is_valid():
         content = form.cleaned_data["content"]
