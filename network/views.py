@@ -5,56 +5,56 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
-from django import forms
 from django.core.paginator import Paginator
-from .models import User, Post, Followers, Likes, Comment
 from django.views.decorators.csrf import csrf_exempt
+from .forms import NewPost, NewComment
+from .models import User, Post, Followers, Likes, Comment
+from .utils import get_post, edit_post, delete_post, like_post, get_comments, create_comment, get_user, follow_user
 import json 
-
-class NewPost(forms.Form):
-    content = forms.CharField(widget=forms.Textarea(
-        attrs={'autofocus': 'autofocus', "placeholder": "¿What is going on?", "rows":3, "class":"form-control"}), required=True, max_length=500)   
-
-class NewComment(forms.Form):
-    content = forms.CharField(widget=forms.Textarea(
-        attrs={"placeholder": "Send your answer", "rows":2, "class":"form-control"}), required=True, max_length=500)
 
 
 def index(request):
     # Return posts in reverse chronological order
     posts = Post.objects.all().order_by("-timestamp")
     
-    paginator = Paginator(posts, 10)
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
+    posts_paginator = Paginator(posts, 10)
+    posts_page_number = request.GET.get('page')
+    posts_page_obj = posts_paginator.get_page(posts_page_number)
 
     return render(request, "network/index.html", {
-            "page_obj": page_obj,
+            "page_obj": posts_page_obj,
             "post_form": NewPost(),
             "comment_form": NewComment(),
             })
 
-def user_posts(request, username):
 
-    try:   
-        user = User.objects.get(username = username)
-    except User.DoesNotExist:
-        return JsonResponse({"error": "User not found."}, status=404)
-        
-    # Return posts in reverse chronological order
-    posts = Post.objects.filter(user=user).order_by("-timestamp")
+@csrf_exempt
+def post(request, post_id):
 
-    paginator = Paginator(posts, 10)
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
+    # Query for requested post
+    try:
+        post = Post.objects.get(pk=post_id)
+    except Post.DoesNotExist:
+        return JsonResponse({"error": "Post not found."}, status=404)
 
-    return render(request, "network/index.html", {
-            "page_obj": page_obj,
-            "form": NewPost(),
-            })
+    if request.method == "GET":
+        return get_post(request, post)
+
+    elif request.method == "PUT":
+        return edit_post(request, post)
+
+    elif request.method == 'DELETE':
+        return delete_post(request, post)
+
+    elif request.method == 'POST':
+        return like_post(request, post)
+
+    else:
+        return JsonResponse({"error": "Method not allowed."}, status=400)
 
 
-def get_comments(request, post_id):
+@csrf_exempt   
+def comments(request, post_id):
     
     # Query for requested post
     try:
@@ -62,13 +62,31 @@ def get_comments(request, post_id):
     except Post.DoesNotExist:
         return JsonResponse({"error": "Post not found."}, status=404)
 
-    comments = Comment.objects.filter(post=post).order_by('-timestamp')
-
-    # Return post contents
     if request.method == "GET":
-        return JsonResponse([comment.serialize() for comment in comments], safe=False)
+        return get_comments(request, post)
+    
+    elif request.method == "POST":
+        return create_comment(request, post)
+
     else:
-        return JsonResponse({"error": "GET request required."}, status=400)
+        return JsonResponse({"error": "Method not allowed."}, status=400)
+
+
+def user_profile(request, username):
+
+    try:   
+        profile_user = User.objects.get(username = username)
+    except User.DoesNotExist:
+        return JsonResponse({"error": "User not found."}, status=404)
+
+    if request.method == "GET":
+        return get_user(request, profile_user)
+    
+    elif request.method == "POST":
+        return follow_user(request, profile_user)
+
+    else:
+        return JsonResponse({"error": "Method not allowed."}, status=400)
 
 
 def login_view(request):
@@ -103,74 +121,35 @@ def following_posts(request, username):
     users_following = Followers.objects.filter(user = user).values_list('following')
     
     # Return posts in reverse chronological order
-    posts =Post.objects.filter(user__in=users_following).order_by("-timestamp")
+    posts = Post.objects.filter(user__in=users_following).order_by("-timestamp")
 
-    paginator = Paginator(posts, 10)
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
+    posts_paginator = Paginator(posts, 10)
+    posts_page_number = request.GET.get('page')
+    posts_page_obj = posts_paginator.get_page(posts_page_number)
 
     return render(request, "network/index.html", {
-            "page_obj": page_obj,
+            "page_obj": posts_page_obj,
             "post_form": NewPost(),
             "comment_form": NewComment()
             })
             
+@login_required(login_url=login_view)
+def new_post(request):
 
-def post_view(request, post_id):
+    # Creating a new post must be via POST
+    if request.method != "POST":
+        return JsonResponse({"error": "POST request required."}, status=400)
 
-    # Query for requested post
-    try:
-        post = Post.objects.get(pk=post_id)
-    except Post.DoesNotExist:
-        return JsonResponse({"error": "Post not found."}, status=404)
-    
-    comments = Comment.objects.filter(post=post).order_by("-timestamp")
+    form = NewPost(request.POST)
 
-    paginator = Paginator(comments, 10)
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
+    if form.is_valid():
+        content = form.cleaned_data["content"]
 
-    return render(request, "network/post.html", {
-            "post": post,
-            "page_obj": page_obj,
-            "comment_form": NewComment()
-            })
+        # Save post in database
+        post = Post(user=request.user, content=content)
+        post.save()
 
-def user_profile(request, username):
-
-    ## if request.user.username != username:
-    ##     return JsonResponse({"error": "Forbidden."}, status=403)
-
-    try:   
-        profile_user = User.objects.get(username = username)
-    except User.DoesNotExist:
-        return JsonResponse({"error": "User not found."}, status=404)
-
-    # Query for users being followed by requested user
-    users_following = Followers.objects.filter(user = profile_user).values_list('following')
-
-    # Query for users who follow requested user
-    users_followers = Followers.objects.filter(following = profile_user).values_list('user')
-
-    following_user_list = User.objects.filter(id__in=users_following)
-    followers_user_list = User.objects.filter(id__in=users_followers)
-    # Return user posts in reverse chronological order
-
-    posts = Post.objects.filter(user=profile_user).order_by("-timestamp").all()
-    
-    paginator = Paginator(posts, 10)
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-
-
-    return render(request, "network/profile.html",{
-            "profile_user": profile_user,
-            "page_obj": page_obj,
-            'users_following': following_user_list,
-            'users_followers': followers_user_list,
-            "comment_form": NewComment()
-
-            })
+    return HttpResponseRedirect(reverse("index"))
 
 
 def logout_view(request):
@@ -205,183 +184,4 @@ def register(request):
         return render(request, "network/register.html")
 
 
-@login_required(login_url=login_view)
-def new_post(request):
 
-    # Creating a new post must be via POST
-    if request.method != "POST":
-        return JsonResponse({"error": "POST request required."}, status=400)
-
-    form = NewPost(request.POST)
-
-    if form.is_valid():
-        content = form.cleaned_data["content"]
-
-        # Save post in database
-        post = Post(
-            user=request.user,
-            content=content,
-        )
-        post.save()
-
-    return HttpResponseRedirect(reverse("index"))
-
-@csrf_exempt   
-@login_required(login_url=login_view)
-def edit_post(request, post_id):
-    # Query current post
-    try:
-        post = Post.objects.get(pk=post_id)
-    except Post.DoesNotExist:
-        return JsonResponse({"error": "Post not found."}, status=404)
-
-    # Request user must be the same as post author to be able to edit the post
-    if request.user != post.user:
-        return JsonResponse({"error": "Forbidden."}, status=403)
-
-    # Edit post must be via PUT
-    if request.method == "POST":
-        
-        data = json.loads(request.body)
-
-        # Get contents of email
-        content = data.get("content", "")
-
-        if content == [""]:
-            return JsonResponse({
-                "error": "Post empty."
-            }, status=400)
-
-        # Update post
-        post.content = content
-        post.save()
-
-        return JsonResponse({"message": f"Post edited"}, status=200)
-    
-    else:
-        return JsonResponse({"error": "PUT request required."}, status=400)
-    
-
-@csrf_exempt   
-@login_required(login_url=login_view)
-def delete_post(request, post_id):
-    # Query current post
-    try:
-        post = Post.objects.get(pk=post_id)
-    except Post.DoesNotExist:
-        return JsonResponse({"error": "Post not found."}, status=404)
-
-    # Request user must be the same as post author to be able to edit the post
-    if request.user != post.user:
-        return JsonResponse({"error": "Forbidden."}, status=403)
-
-    # Edit post must be via PUT
-    if request.method == "DELETE":
-        
-        # Delete post
-        post.delete()
-
-        return JsonResponse({"message": f"Post deleted"}, status=200)
-    
-    else:
-        return JsonResponse({"error": "DELETE request required."}, status=400)
-
-@csrf_exempt   
-@login_required(login_url=login_view)
-def new_comment(request, post_id):
-
-    # Creating a new comment must be via POST
-    if request.method != "POST":
-        return JsonResponse({"error": "POST request required."}, status=400)
-
-    # Query for requested post
-    try:
-        post = Post.objects.get(pk=post_id)
-    except User.DoesNotExist:
-        return JsonResponse({"error": f"Post with id {post_id} does not exist."}, status=400)
-
-    data = json.loads(request.body)
-
-    # Get contents of email
-    content = data.get("comment", "")
-    if content == [""]:
-        return JsonResponse({
-            "error": "Comment empty."
-        }, status=400)
-
-    # Save comment in database
-    comment = Comment(
-        user=request.user,
-        content=content,
-        post = post,
-    )
-    comment.save()
-
-    comment_count = Comment.objects.filter(post=post).count()
-    # Redirect to the place where the request came
-    return JsonResponse({"message": f"Created comment", "comment_count": comment_count}, status=200)
-
-@csrf_exempt   
-@login_required(login_url=login_view)
-def new_like(request, post_id):
-
-    # Creating a new like must be via POST
-    if request.method != "POST":
-        return JsonResponse({"error": "POST request required."}, status=400)
-    
-    # Query for requested post
-    try:
-        post = Post.objects.get(pk=post_id)
-    except User.DoesNotExist:
-        return JsonResponse({"error": f"Post with id {post_id} does not exist."}, status=400)
-
-    # Query for like by current user
-    like = Likes.objects.filter(user=request.user, post=post)
-
-    if like.exists():
-        # Delete like from database
-        like.delete()
-    else:
-        # Save like in database
-        like = Likes(
-            user=request.user,
-            post = post,
-            )
-        like.save()
-
-    # Query for like count for current post
-    like_count = Likes.objects.filter(post=post).count()
-
-    # Redirect to the place where the request came
-    return JsonResponse({"message": f"Liked post with id {post_id}", "like_count": like_count}, status=200)
-
-
-@login_required(login_url=login_view)
-def new_follow(request, username):
-
-    # Creating a new like must be via POST
-    if request.method != "POST":
-        return JsonResponse({"error": "POST request required."}, status=400)
-    
-    # Query for requested user
-    try:   
-        following_user = User.objects.get(username = username)
-    except User.DoesNotExist:
-        return JsonResponse({"error": "User not found."}, status=404)
-
-    # Query for requested like
-    following = Followers.objects.filter(user=request.user, following=following_user)
-
-    if following.exists():
-        # Delete like from database
-        following.delete()
-    else:
-        # Save like in database
-        following = Followers(
-            user = request.user,
-            following = following_user,
-            )
-        following.save()
-
-    # Redirect to the place where the request came
-    return HttpResponseRedirect(request.headers['Referer'])

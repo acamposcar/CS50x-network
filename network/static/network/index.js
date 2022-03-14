@@ -2,7 +2,7 @@ function sendLike(post) {
   /*----------------
   Send email (POST)
   ----------------*/
-  fetch(`/api/posts/${post.id.substr(5)}/new_like`, {
+  fetch(`/posts/${post.id.substr(5)}`, {
     method: 'POST',
     body: JSON.stringify({
       post: post.id.substr(5),
@@ -13,7 +13,6 @@ function sendLike(post) {
       if (result.error) {
         console.log(result);
       } else {
-        console.log(result);
         post.querySelector('.post-like-count').textContent = result.like_count;
         post.querySelector('.post-like-heart').classList.toggle('liked');
       }
@@ -24,10 +23,11 @@ function newComment(post) {
   /*----------------
   Send email (POST)
   ----------------*/
-  fetch(`/api/posts/${post.id.substr(5)}/new_comment`, {
+  fetch(`/posts/${post.id.substr(5)}/comments`, {
     method: 'POST',
     body: JSON.stringify({
       comment: post.querySelector('#id_content').value,
+
     }),
   })
     .then((response) => response.json())
@@ -66,7 +66,7 @@ function deletePost(post, deletePopup) {
   /*----------------
   Send email (POST)
   ----------------*/
-  fetch(`/api/posts/${post.id.substr(5)}/delete`, { method: 'DELETE' })
+  fetch(`/posts/${post.id.substr(5)}`, { method: 'DELETE' })
     .then((response) => response.json())
     .then((result) => {
       if (result.error) {
@@ -85,10 +85,10 @@ function editPost(post, editPopup) {
   Send email (POST)
   ----------------*/
   const content = editPopup.querySelector('#id_content').value.trim();
-  fetch(`/api/posts/${post.id.substr(5)}/edit`, {
-    method: 'POST',
+  fetch(`/posts/${post.id.substr(5)}`, {
+    method: 'PUT',
     body: JSON.stringify({
-      content: content,
+      content,
     }),
   })
     .then((response) => response.json())
@@ -109,14 +109,14 @@ function editPost(post, editPopup) {
 }
 
 function avatarChangeColor(name) {
-    /* 
+  /*
     Transform any string into a HEX Color
-    From: https://stackoverflow.com/a/17880920/12474129 
+    From: https://stackoverflow.com/a/17880920/12474129
     */
-    const n = 'abcdefghijklmnopqrstuvwxyz'.split('');
-    const r = name.split('').map(function(e) {return n.indexOf(e);}).join('');
-    const l = parseFloat( '0.'+ (r*r*1000).toString().replace(/^0/, ''));
-    return '#'+Math.floor(l*16777215).toString(16);
+  const n = 'abcdefghijklmnopqrstuvwxyz'.split('');
+  const r = name.split('').map((e) => n.indexOf(e)).join('');
+  const l = parseFloat(`0.${(r * r * 1000).toString().replace(/^0/, '')}`);
+  return `#${Math.floor(l * 16777215).toString(16)}`;
 }
 
 function showEditPopup(post) {
@@ -134,7 +134,7 @@ function showEditPopup(post) {
   editPopup.querySelector('.cancel-edit-button').onclick = () => {
     editPopup.querySelector('#id_content').value = '';
     editPopup.style.display = 'none';
-  }
+  };
 }
 
 function showDeletePopup(post) {
@@ -153,7 +153,7 @@ function showDeletePopup(post) {
 }
 
 function getComments(post) {
-  fetch(`/api/posts/${post.id.substr(5)}/comments`)
+  fetch(`/posts/${post.id.substr(5)}/comments`)
     .then((response) => response.json())
     .then((comments) => {
       if (comments.error) {
@@ -164,7 +164,7 @@ function getComments(post) {
 
         // Hide view more comments button
         post.querySelector('.post-comment-more').style.display = 'none';
-        
+
         // Show last three comments
         let i = 0;
         for (const comment of comments) {
@@ -179,7 +179,7 @@ function getComments(post) {
     });
 }
 
-function updateLikePost(post) {
+function updatePost(post) {
   // Add or remove likes
   if (post.querySelector('.post-likes-form') !== null) {
     post.querySelector('.post-likes-form').onsubmit = () => {
@@ -201,33 +201,30 @@ function updateLikePost(post) {
       post.querySelector('.post-comments').classList.toggle('active');
     };
   }
-  // Show edit popup if the edit button exists (only is current user is the post author)
+  // Show edit popup
   if (post.querySelector('.post-edit-button') !== null) {
     post.querySelector('.post-edit-button').onclick = () => {
       showEditPopup(post);
     };
   }
 
+  // Show delete popup
   if (post.querySelector('.post-delete-button') !== null) {
     post.querySelector('.post-delete-button').onclick = () => {
       showDeletePopup(post);
     };
   }
-
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Use buttons to toggle between views
-
-  // By default, load the inbox
-
+  // Update post depending on the actions made by the user
   document.querySelectorAll('div.post').forEach((post) => {
-    updateLikePost(post);
+    updatePost(post);
   });
 
+  // Change avatar color depending on username
   document.querySelectorAll('.user-avatar').forEach((item) => {
     const username = item.querySelector('.post-username').textContent;
-    item.querySelector('.avatar').style.fill=avatarChangeColor(username);
+    item.querySelector('.avatar').style.fill = avatarChangeColor(username);
   });
-
-})
+});

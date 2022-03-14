@@ -17,7 +17,7 @@
             </div>
             {% if user.is_authenticated and profile_user != user %}
             <div class="d-flex justify-content-center mb-4 mt-3">
-            <form action="{% url 'new_follow' profile_user.username %}" method="post">
+            <form action="{% url 'user_profile' profile_user.username %}" method="post">
                 {% csrf_token %}
                 {% if user in users_followers %}
                 <input class="btn btn-danger" type="submit" value="Unfollow">

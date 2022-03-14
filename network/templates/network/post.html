@@ -11,7 +11,7 @@
 
 <div class="post mt-5">
     {% if user.is_authenticated %}
-        <form class="post mb-4 mt-2" action="{% url 'new_comment' post.id %}"  method="POST">
+        <form class="post mb-4 mt-2" action="{% url 'comments' post.id %}"  method="POST">
             {% include "network/partials/form_fields.html" with form=comment_form %}
             <input class="btn btn-light" type="submit" value="New comment">
         </form>
