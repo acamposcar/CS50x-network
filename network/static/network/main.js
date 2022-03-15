@@ -62,8 +62,8 @@ function updatePost(post) {
   }
 
   // Create new comment
-  if (post.querySelector('.post-comment-form') !== null) {
-    post.querySelector('.post-comment-form').onsubmit = () => {
+  if (post.querySelector('.form-comment') !== null) {
+    post.querySelector('.form-comment').onsubmit = () => {
       createComment(post);
       return false;
     };

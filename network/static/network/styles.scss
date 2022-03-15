@@ -1,4 +1,5 @@
-$primary-color: rgb(255, 247, 233);
+$primary-color: #6ba2e6;
+$hover-color: #4a91e7;
 $border-color: rgb(219, 215, 219);
 
 body{
@@ -7,24 +8,39 @@ body{
 }
 
 .btn-light{
-    border-color: rgb(255, 204, 0);
-    background-color: white;
+    border-color: $primary-color;
+    background-color: $primary-color;
     border-width: 1.5px;
     font-size: 0.9rem;
+    font-weight: 500;
+    color: white;
     box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 
     &:hover{
-        border-color: $primary-color;
-        background-color: rgb(252, 239, 186);
+        border-color: $hover-color;
+        background-color: $hover-color;
+        color: white;
+
     }
 }
 
-a{
-    color: rgb(170, 136, 0);
+.btn-danger{
+    background-color: white;
+    border-color: $primary-color;
+    color: black;
+    border-width: 2px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+
+    &:hover{
+    border-color: $hover-color;
+    background-color: $hover-color;
+    color: white;
+
+    }
 }
-a:hover{
-    color: rgba(53, 52, 40, 0.904);
-}
+
 .container{
     max-width: 650px;
 }
@@ -33,15 +49,24 @@ a:hover{
 /* NAVBAR */
 nav{
     background-color: white;
+    margin-bottom: 25px;
 
 }
 .nav-link.active {
 	font-weight: 500;
 }
 
+/* NEW POST */
+
+
+
 /* POST */
 
-.post, .comment, .post-comment-form{
+.post{
+    background-color: #FFF;
+    padding: 30px 30px 0px 30px;
+}
+.post-comment-form{
     border: thin solid $border-color;
     border-radius: 10px;
     padding: 20px;
@@ -77,7 +102,7 @@ a {
 }
 
 .post-content{
-    margin-bottom: 30px;
+    margin-bottom: 20px;
     margin-top: 15px;
 }
 
@@ -112,6 +137,7 @@ a {
     transition: max-height 1s ease-out;
     max-height: 0;
     overflow: hidden;
+    padding: 0 30px;
 }
 
 .post-comments.active{
@@ -129,6 +155,11 @@ a {
 }
 .dropdown-item{
     cursor: pointer;
+}
+
+.comment{
+    background-color: #FFF;
+    padding: 15px 15px 0 15px;
 }
 
 .comment-content{
@@ -149,6 +180,7 @@ a {
   display: none;
   position: fixed;
   margin-left: -10px;
+  padding: 25px;
   top: 30%;
   background: #FFF;
   z-index: 20;
@@ -162,10 +194,28 @@ a {
 
 /* FORM */
 
+.form-new{
+    background-color: #dfe1e7;
+    padding: 30px;
+
+}
+
+.form-comment{
+    background-color: #dfe1e7;
+    padding: 15px;
+
+}
 textarea.form-control {
   resize: none;
+  background-color: #dfe1e7;
   border: none;
-  
+
+}
+
+textarea.form-control:focus{
+      background-color: #dfe1e7;
+      border: none;
+      box-shadow: none;
 }
 
 input[type=submit]{
@@ -180,11 +230,7 @@ input[type=submit]{
     background-color: white;
     padding-top: 30px;
     padding-bottom: 8px;
-    margin-top: 20px;
-    margin-bottom: 30px;
-    border-bottom: thin solid $border-color;
-    border-top: thin solid $border-color;
-    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    margin-bottom: 15px;
 }
 
 .profile-image{

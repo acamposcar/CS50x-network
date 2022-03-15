@@ -40,7 +40,7 @@
                 {{ post.content|linebreaks }}
             </div>
             
-            <div class="post-footer d-flex justify-content-around">
+            <div class="post-footer d-flex justify-content-around mb-3">
 
                 <!-- Likes form -->
                 <form class="post-likes-form">
@@ -101,9 +101,9 @@
             <div class="post-comments">
                 
                 {% if user.is_authenticated %}
-                    <form class="post-comment-form mb-4 mt-2">
+                    <form class="form-comment mb-4 mt-2">
                         {% include "network/partials/form_fields.html" with form=comment_form %}
-                        <input class="btn btn-light" type="submit" value="New comment">
+                        <input class="btn btn-light" type="submit" value="Comment">
                     </form>
                 {% endif %}
 
@@ -111,12 +111,12 @@
                         <!-- Updated using JS -->
                 </div>
                 
-                <div class="d-flex justify-content-center">
+                <div class="d-flex justify-content-center mb-5">
                     <a href="{% url 'post' post.id %}">
-                        <button class="post-comment-more btn btn-light">View more comments</button>  
+                        <button class="post-comment-more btn btn-light">More comments</button>  
                     </a>
                 </div>
-
+                
             </div>
 
         </div>
