@@ -1,11 +1,26 @@
-import email
+
 from lib2to3.pgen2.pgen import DFAState
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+import random
+
+THE_OFFICE_PROFILE = [
+    'https://socialnewsdaily.com/wp-content/uploads/2018/07/rsz_014.jpg',
+    'https://images.thebrag.com/tb/uploads/2020/02/PAMHEAD-768x437.jpg',
+    'https://www.cultture.com/pics/2021/06/the-office-10-teorias-de-los-fans-que-tienen-demasiado-sentido-0.jpg',
+    'https://1.bp.blogspot.com/-TAjlxuqoAp8/XoTJpp1mTzI/AAAAAAAAJJk/_rKTvsvfin8Vt-xPU0n9j34I7okTLxH8gCEwYBhgLKs4DAMBZVoCctLm-dNK578kFojA_mIdN7nkfwLLDI6cVlXxLlsm3VuEgx1fw8P6O3fKPS_K-LICzkVqfNyZ83I3qu76aMZjSTcQneQ4NYnXpW6Q5wHEWPh1QMByjRItTDWuSojpJ2uL31JZ4UuYILdsHxpNfjxoJAj7JqgSaYITgmjLOqeSoNg0ZQYiD3iusn_v5QOyczrkSaENG8cd_R5b7o8uHIhoNvaAncorSddQYAAb9j4SPW8rca6sL3Y1M5rUd6KTSsfoRKONeDlRdsYR6DzSGbs5oE3LLCK-alU-5n1WREwU8xqQtY4l8JBrP-mndGGPTi5Lt1CJGTwofESEfcrQu4NBhWKcROL4wnhX6w1vTGfc0EH_Z62KutfOok0anCJd1h53M2zy-YJDg7n5H-vPMm_9ihJ5r-RLRVgkdS1-Wkl6zJDTSP2LZ9vdydt8ZDPkcIyj8w2EcVH3m4TFBkaOnW44YqCYgbJVX7bSK2X4ULSMKQrfpJasHE_F5uIFRwhiE8KVkWn8_GO9Ngp5u7wFEnY4xVwlKKNLwfG8yAub3haeP90qJvHgdR2A1lJ0uj-SUhcmMYcovhJ1aAN_Hdz-M3STEUTT927KL_1YFMPOok_QF/s640/the-office-brian-500x279.jpg',
+    'https://poptv.orange.es/wp-content/uploads/sites/3/2020/08/phyllis-smith.jpg',
+    'https://www.ecartelera.com/images/sets/43800/43814.jpg',
+    'https://www.ecartelera.com/images/sets/43800/43825.jpg'
+]
 
 
 class User(AbstractUser):
     profile_image = models.URLField(default="https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/OOjs_UI_icon_userAvatar.svg/240px-OOjs_UI_icon_userAvatar.svg.png")
+
+    def set_profile_image(self):
+        self.profile_image = random.choice(THE_OFFICE_PROFILE)
+    
 
 
 class Post(models.Model):
