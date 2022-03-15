@@ -6,7 +6,7 @@ from django.http import HttpResponseRedirect
 from .forms import CommentForm, PostForm
 from .models import User, Post, Followers, Likes, Comment
 
-import json 
+import json
 
 
 """
@@ -14,6 +14,7 @@ import json
 POST 
 ########
 """
+
 
 def get_post(request, post):
 
@@ -24,11 +25,11 @@ def get_post(request, post):
     comments_page_obj = comments_paginator.get_page(comments_page_number)
 
     return render(request, "network/post.html", {
-            "post": post,
-            "page_obj": comments_page_obj,
-            "comment_form": CommentForm(),
-            "post_form": PostForm(),
-            })
+        "post": post,
+        "page_obj": comments_page_obj,
+        "comment_form": CommentForm(),
+        "post_form": PostForm(),
+    })
 
 
 def edit_post(request, post):
@@ -37,7 +38,7 @@ def edit_post(request, post):
     if request.user != post.user:
         return JsonResponse({"error": "Forbidden."}, status=403)
 
-    # Loads data from JSON and gets post content    
+    # Loads data from JSON and gets post content
     data = json.loads(request.body)
     content = data.get("content", "")
 
@@ -49,7 +50,7 @@ def edit_post(request, post):
     post.save()
 
     return JsonResponse({"message": f"Post edited"}, status=200)
-    
+
 
 def delete_post(request, post):
 
@@ -64,7 +65,7 @@ def delete_post(request, post):
 
 
 def like_post(request, post):
-    
+
     if request.user.is_authenticated == False:
         return JsonResponse({"error": "Forbidden."}, status=403)
 
@@ -73,20 +74,21 @@ def like_post(request, post):
     if like.exists():
         like.delete()
     else:
-        like = Likes(user=request.user, post = post)
+        like = Likes(user=request.user, post=post)
         like.save()
 
     # Query for like count for current post
     like_count = Likes.objects.filter(post=post).count()
 
     return JsonResponse({"message": f"Liked post with id {post.id}", "like_count": like_count}, status=200)
-    
+
 
 """
 ########
 COMMENTS 
 ########
 """
+
 
 def get_comments(request, post):
 
@@ -109,7 +111,7 @@ def create_comment(request, post):
         return JsonResponse({"error": "Comment empty."}, status=400)
 
     # Save comment in database
-    comment = Comment(user=request.user, content=content, post = post)
+    comment = Comment(user=request.user, content=content, post=post)
     comment.save()
 
     # Query for comment count for current post
@@ -117,7 +119,6 @@ def create_comment(request, post):
 
     return JsonResponse({"message": f"Created comment", "comment_count": comment_count}, status=200)
 
-        
 
 """
 ########
@@ -125,14 +126,17 @@ USER
 ########
 """
 
+
 def get_user(request, profile_user):
 
     # Query for users being followed by requested user
-    users_following = Followers.objects.filter(user = profile_user).values_list('following')
+    users_following = Followers.objects.filter(
+        user=profile_user).values_list('following')
     following_user_list = User.objects.filter(id__in=users_following)
 
     # Query for users who follow requested user
-    users_followers = Followers.objects.filter(following = profile_user).values_list('user')
+    users_followers = Followers.objects.filter(
+        following=profile_user).values_list('user')
     followers_user_list = User.objects.filter(id__in=users_followers)
 
     # Return user posts in reverse chronological order
@@ -145,35 +149,36 @@ def get_user(request, profile_user):
 
     # Active item in navbar
     if profile_user == request.user:
-        active ='profile'
+        active = 'profile'
     else:
         active = ""
 
-    return render(request, "network/profile.html",{
-            "profile_user": profile_user,
-            "page_obj": post_page_obj,
-            'users_following': following_user_list,
-            'users_followers': followers_user_list,
-            "comment_form": CommentForm(),
-            "post_form": PostForm(),
-            "post_count": post_count,
-            "active": active,
+    return render(request, "network/profile.html", {
+        "profile_user": profile_user,
+        "page_obj": post_page_obj,
+        'users_following': following_user_list,
+        'users_followers': followers_user_list,
+        "comment_form": CommentForm(),
+        "post_form": PostForm(),
+        "post_count": post_count,
+        "active": active,
 
-            })
+    })
 
 
 def follow_user(request, profile_user):
-    
+
     if request.user.is_authenticated == False:
         return JsonResponse({"error": "Forbidden."}, status=403)
 
     # Query for followers
-    following = Followers.objects.filter(user=request.user, following=profile_user)
+    following = Followers.objects.filter(
+        user=request.user, following=profile_user)
 
     if following.exists():
         following.delete()
     else:
-        following = Followers(user = request.user, following = profile_user,)
+        following = Followers(user=request.user, following=profile_user,)
         following.save()
 
     # Redirect to the place where the request came

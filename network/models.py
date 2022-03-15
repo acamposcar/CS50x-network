@@ -16,22 +16,23 @@ THE_OFFICE_PROFILE = [
 
 
 class User(AbstractUser):
-    profile_image = models.URLField(default="https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/OOjs_UI_icon_userAvatar.svg/240px-OOjs_UI_icon_userAvatar.svg.png")
+    profile_image = models.URLField(
+        default="https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/OOjs_UI_icon_userAvatar.svg/240px-OOjs_UI_icon_userAvatar.svg.png")
 
     def set_profile_image(self):
         self.profile_image = random.choice(THE_OFFICE_PROFILE)
-    
 
 
 class Post(models.Model):
-    user = models.ForeignKey("User", on_delete=models.CASCADE, related_name="posts")
+    user = models.ForeignKey(
+        "User", on_delete=models.CASCADE, related_name="posts")
     content = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
     image = models.URLField(default='', blank=True)
 
     def users_likes(self):
         user_likes_list = Likes.objects.filter(post=self).values_list('user')
-        return User.objects.filter(id__in = user_likes_list)
+        return User.objects.filter(id__in=user_likes_list)
 
     def last_comments(self):
         return Comment.objects.filter(post=self).order_by('-timestamp')[:3]
@@ -41,8 +42,10 @@ class Post(models.Model):
 
 
 class Comment(models.Model):
-    user = models.ForeignKey("User", on_delete=models.CASCADE, related_name="user_comments")
-    post = models.ForeignKey("Post", on_delete=models.CASCADE, related_name="comments", blank=True)
+    user = models.ForeignKey(
+        "User", on_delete=models.CASCADE, related_name="user_comments")
+    post = models.ForeignKey(
+        "Post", on_delete=models.CASCADE, related_name="comments", blank=True)
     content = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
 
@@ -57,13 +60,16 @@ class Comment(models.Model):
             "content": self.content,
             "timestamp": self.timestamp.strftime("%b %d %Y, %I:%M %p"),
         }
+
     def __str__(self):
         return f"Comment [{self.id}] made by {self.user.username} on {self.timestamp.strftime('%d %b %Y %H:%M:%S')}"
 
 
 class Likes(models.Model):
-    user = models.ForeignKey("User", on_delete=models.CASCADE, related_name="user_likes")
-    post = models.ForeignKey("Post", on_delete=models.CASCADE, related_name="likes", blank=True, null=True)
+    user = models.ForeignKey(
+        "User", on_delete=models.CASCADE, related_name="user_likes")
+    post = models.ForeignKey(
+        "Post", on_delete=models.CASCADE, related_name="likes", blank=True, null=True)
 
     class Meta:
         unique_together = ['user', 'post']
@@ -73,9 +79,11 @@ class Likes(models.Model):
 
 
 class Followers(models.Model):
-    user = models.ForeignKey("User", on_delete=models.CASCADE, related_name="user_followers")
-    following = models.ForeignKey("User", on_delete=models.CASCADE, related_name="user_following", blank=True, null=True)
-    
+    user = models.ForeignKey(
+        "User", on_delete=models.CASCADE, related_name="user_followers")
+    following = models.ForeignKey(
+        "User", on_delete=models.CASCADE, related_name="user_following", blank=True, null=True)
+
     class Meta:
         unique_together = ['user', 'following']
 

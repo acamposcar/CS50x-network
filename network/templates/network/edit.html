@@ -1,40 +1,40 @@
 {% extends "network/layout.html" %} {% load static %}
 
 {% block script %}
-    <script src="{% static 'network/post.js' %}"></script>
+<script src="{% static 'network/post.js' %}"></script>
 {% endblock %}
 
 {% block body %}
 {% if user.is_authenticated %}
-    <form action="{% url 'edit_post' post.id %}"  method="POST">
-        {% csrf_token %}
-        {% if form.non_field_errors %}
-            <div class="alert alert-danger" role="alert">
-            {% for error in form.non_field_errors %}
-                {{ error }}
-            {% endfor %}
-            </div>
-        {% endif %}
-
-        {% for field in form %}
-            <div class="form-group">
-                {{field}}
-                {% if field.errors %}
-                    {% for error in field.errors %}
-                        <small class="text-danger">
-                            {{ error }}
-                        </small>
-                    {% endfor %}
-                {% endif %}             
-            </div>
-
+<form action="{% url 'edit_post' post.id %}" method="POST">
+    {% csrf_token %}
+    {% if form.non_field_errors %}
+    <div class="alert alert-danger" role="alert">
+        {% for error in form.non_field_errors %}
+        {{ error }}
         {% endfor %}
-        
-        <div class="form-group">
-            <input class="btn btn-light" type="submit" value="Edit Post">
-        </div>
+    </div>
+    {% endif %}
 
-    </form>
+    {% for field in form %}
+    <div class="form-group">
+        {{field}}
+        {% if field.errors %}
+        {% for error in field.errors %}
+        <small class="text-danger">
+            {{ error }}
+        </small>
+        {% endfor %}
+        {% endif %}
+    </div>
+
+    {% endfor %}
+
+    <div class="form-group">
+        <input class="btn btn-light" type="submit" value="Edit Post">
+    </div>
+
+</form>
 {% endif %}
 
 {% endblock %}

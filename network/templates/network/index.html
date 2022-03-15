@@ -1,7 +1,7 @@
 {% extends "network/layout.html" %} {% load static %}
 
 {% block script %}
-    <script type="module" src="{% static 'network/main.js' %}"></script>
+<script type="module" src="{% static 'network/main.js' %}"></script>
 {% endblock %}
 
 {% block body %}
@@ -10,10 +10,10 @@
 
 
 {% if user.is_authenticated and post_form %}
-    <form class="form-new" action="{% url 'new_post' %}"  method="POST">
-        {% include "network/partials/form_fields.html" with form=post_form %}
-        <input class="btn btn-light" type="submit" value="Post">
-    </form>
+<form class="form-new" action="{% url 'new_post' %}" method="POST">
+    {% include "network/partials/form_fields.html" with form=post_form %}
+    <input class="btn btn-light" type="submit" value="Post">
+</form>
 {% endif %}
 
 {% include "network/partials/popup.html" %}

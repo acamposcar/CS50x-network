@@ -2,35 +2,35 @@
 
 {% block body %}
 
-    <h2 class="mt-5 mb-4">Register</h2>
+<h2 class="mt-5 mb-4">Register</h2>
 
-    {% if message %}
-        <div class="alert alert-danger">{{ message }}</div>
-    {% endif %}
+{% if message %}
+<div class="alert alert-danger">{{ message }}</div>
+{% endif %}
 
-    <form action="{% url 'register' %}" method="post">
-        {% csrf_token %}
-        <div class="mb-2">
-            <input class="form-control" required autofocus type="text" name="username" placeholder="Username">
-        </div>
-        <div class="mb-2">
-            <input class="form-control" required type="text" name="first_name" placeholder="First Name">
-        </div>
-        <div class="mb-2">
-            <input class="form-control" required type="text" name="last_name" placeholder="Last Name">
-        </div>
-        <div class="mb-2">
-            <input class="form-control" required type="email" name="email" placeholder="Email Address">
-        </div>
-        <div class="mb-2">
-            <input class="form-control" required type="password" name="password" placeholder="Password">
-        </div>
-        <div class="mb-2">
-            <input class="form-control" required type="password" name="confirmation" placeholder="Confirm Password">
-        </div>
-        <input class="btn btn-light" type="submit" value="Register">
-    </form>
+<form action="{% url 'register' %}" method="post">
+    {% csrf_token %}
+    <div class="mb-2">
+        <input class="form-control" required autofocus type="text" name="username" placeholder="Username">
+    </div>
+    <div class="mb-2">
+        <input class="form-control" required type="text" name="first_name" placeholder="First Name">
+    </div>
+    <div class="mb-2">
+        <input class="form-control" required type="text" name="last_name" placeholder="Last Name">
+    </div>
+    <div class="mb-2">
+        <input class="form-control" required type="email" name="email" placeholder="Email Address">
+    </div>
+    <div class="mb-2">
+        <input class="form-control" required type="password" name="password" placeholder="Password">
+    </div>
+    <div class="mb-2">
+        <input class="form-control" required type="password" name="confirmation" placeholder="Confirm Password">
+    </div>
+    <input class="btn btn-light" type="submit" value="Register">
+</form>
 
-    <small>Already have an account? <a href="{% url 'login' %}">Log In here.</a></small>
+<small>Already have an account? <a href="{% url 'login' %}">Log In here.</a></small>
 
 {% endblock %}

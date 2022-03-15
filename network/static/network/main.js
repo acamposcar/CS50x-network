@@ -6,15 +6,12 @@ import {
   getComments,
 } from './fetch.js';
 
-import {
-  avatarChangeColor,
-} from './utils.js';
-
+import { avatarChangeColor } from './utils.js';
 
 export function showEditPopup(post) {
   /**
-    *  Show popup to edit post
-    */
+   *  Show popup to edit post
+   */
   const postContent = post.querySelector('.post-content').innerText.trim();
   const editPopup = document.querySelector('.edit-popup');
   editPopup.querySelector('#id_content').value = postContent;
@@ -35,8 +32,8 @@ export function showEditPopup(post) {
 
 export function showDeletePopup(post) {
   /**
-    *  Show popup to delete post
-    */
+   *  Show popup to delete post
+   */
   const deletePopup = document.querySelector('.delete-popup');
   deletePopup.style.display = 'block';
 
@@ -50,7 +47,6 @@ export function showDeletePopup(post) {
     deletePopup.style.display = 'none';
   };
 }
-
 
 function updatePost(post) {
   // Add or remove likes

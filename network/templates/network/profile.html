@@ -1,61 +1,61 @@
 {% extends "network/layout.html" %} {% load static %}
 
 {% block script %}
-    <script type="module" src="{% static 'network/main.js' %}"></script>
+<script type="module" src="{% static 'network/main.js' %}"></script>
 {% endblock %}
-    
+
 {% block profile %}
-          
-    
-    
 
-     
-    <div class="container">
-        <div class="profile">
-            <div class="profile-info d-flex justify-content-center gap-3 mb-5 mt-3">
-                <img class="profile-image" src="{{ profile_user.profile_image }}" alt="Profile Image">
-                <div class="profile-user-info d-flex flex-column">    
-                    <div class="profile-name">{{ profile_user.first_name }} {{profile_user.last_name}}</div>
-                    <div class="profile-username">@{{ profile_user.username }}</div>
-                    <div class="profile-follow-button mt-auto d-flex">
-                        {% if user.is_authenticated and profile_user != user %}
-                        <form action="{% url 'user_profile' profile_user.username %}" method="post">
-                            {% csrf_token %}
-                            {% if user in users_followers %}
-                            <input class="btn btn-danger" type="submit" value="Unfollow">
-                            {% else %}
-                            <input class="btn btn-light" type="submit" value="Follow">
-                            {% endif %}
-                        </form>
+
+
+
+
+<div class="container">
+    <div class="profile">
+        <div class="profile-info d-flex justify-content-center gap-3 mb-5 mt-3">
+            <img class="profile-image" src="{{ profile_user.profile_image }}" alt="Profile Image">
+            <div class="profile-user-info d-flex flex-column">
+                <div class="profile-name">{{ profile_user.first_name }} {{profile_user.last_name}}</div>
+                <div class="profile-username">@{{ profile_user.username }}</div>
+                <div class="profile-follow-button mt-auto d-flex">
+                    {% if user.is_authenticated and profile_user != user %}
+                    <form action="{% url 'user_profile' profile_user.username %}" method="post">
+                        {% csrf_token %}
+                        {% if user in users_followers %}
+                        <input class="btn btn-danger" type="submit" value="Unfollow">
+                        {% else %}
+                        <input class="btn btn-light" type="submit" value="Follow">
                         {% endif %}
-                    </div>
+                    </form>
+                    {% endif %}
                 </div>
-
             </div>
-            <div class="profile-follower-info d-flex justify-content-around pt-2">
-                <div class="profile-followers-group">
-                    <div class="profile-followers-count">{{ post_count }}</div>
-                    <div><small>Posts</small></div>
-                </div>
-                <div class="profile-followers-group">
-                    <div class="profile-followers-count">{{ users_followers.count }}</div>
-                    <div><small>Followers</small></div>
-                </div>
-                <div class="profile-followers-group">
-                    <div class="profile-followers-count">{{ users_following.count }}</div>
-                    <div><small>Following</small></div>
-                </div>
+
+        </div>
+        <div class="profile-follower-info d-flex justify-content-around pt-2">
+            <div class="profile-followers-group">
+                <div class="profile-followers-count">{{ post_count }}</div>
+                <div><small>Posts</small></div>
+            </div>
+            <div class="profile-followers-group">
+                <div class="profile-followers-count">{{ users_followers.count }}</div>
+                <div><small>Followers</small></div>
+            </div>
+            <div class="profile-followers-group">
+                <div class="profile-followers-count">{{ users_following.count }}</div>
+                <div><small>Following</small></div>
             </div>
         </div>
     </div>
-  {% endblock %}
+</div>
+{% endblock %}
 {% block body %}
-            
-            
-        <div class="container-posts">
-{% include "network/partials/popup.html" %}
 
-{% include "network/partials/posts.html" %}
-        </div>
+
+<div class="container-posts">
+    {% include "network/partials/popup.html" %}
+
+    {% include "network/partials/posts.html" %}
+</div>
 
 {% endblock %}
