@@ -6,15 +6,12 @@ import {
   getComments,
 } from './fetch.js';
 
-import {
-  avatarChangeColor,
-} from './utils.js';
-
+import { avatarChangeColor } from './utils.js';
 
 export function showEditPopup(post) {
   /**
-    *  Show popup to edit post
-    */
+   *  Show popup to edit post
+   */
   const postContent = post.querySelector('.post-content').innerText.trim();
   const editPopup = document.querySelector('.edit-popup');
   editPopup.querySelector('#id_content').value = postContent;
@@ -35,8 +32,8 @@ export function showEditPopup(post) {
 
 export function showDeletePopup(post) {
   /**
-    *  Show popup to delete post
-    */
+   *  Show popup to delete post
+   */
   const deletePopup = document.querySelector('.delete-popup');
   deletePopup.style.display = 'block';
 
@@ -51,7 +48,6 @@ export function showDeletePopup(post) {
   };
 }
 
-
 function updatePost(post) {
   // Add or remove likes
   if (post.querySelector('.post-likes-form') !== null) {
@@ -62,8 +58,8 @@ function updatePost(post) {
   }
 
   // Create new comment
-  if (post.querySelector('.post-comment-form') !== null) {
-    post.querySelector('.post-comment-form').onsubmit = () => {
+  if (post.querySelector('.form-comment') !== null) {
+    post.querySelector('.form-comment').onsubmit = () => {
       createComment(post);
       return false;
     };

@@ -15,17 +15,17 @@ from .utils import get_post, edit_post, delete_post, like_post, get_comments, cr
 def index(request):
     # Return posts in reverse chronological order
     posts = Post.objects.all().order_by("-timestamp")
-    
+
     posts_paginator = Paginator(posts, 10)
     posts_page_number = request.GET.get('page')
     posts_page_obj = posts_paginator.get_page(posts_page_number)
 
     return render(request, "network/index.html", {
-            "page_obj": posts_page_obj,
-            "post_form": PostForm(),
-            "comment_form": CommentForm(),
-            "active": 'home',
-            })
+        "page_obj": posts_page_obj,
+        "post_form": PostForm(),
+        "comment_form": CommentForm(),
+        "active": 'home',
+    })
 
 
 def post(request, post_id):
@@ -51,9 +51,9 @@ def post(request, post_id):
     else:
         return JsonResponse({"error": "Method not allowed."}, status=400)
 
- 
+
 def comments(request, post_id):
-    
+
     # Query for requested post
     try:
         post = Post.objects.get(pk=post_id)
@@ -62,7 +62,7 @@ def comments(request, post_id):
 
     if request.method == "GET":
         return get_comments(request, post)
-    
+
     elif request.method == "POST":
         return create_comment(request, post)
 
@@ -72,14 +72,14 @@ def comments(request, post_id):
 
 def user_profile(request, username):
 
-    try:   
-        profile_user = User.objects.get(username = username)
+    try:
+        profile_user = User.objects.get(username=username)
     except User.DoesNotExist:
         return JsonResponse({"error": "User not found."}, status=404)
 
     if request.method == "GET":
         return get_user(request, profile_user)
-    
+
     elif request.method == "POST":
         return follow_user(request, profile_user)
 
@@ -106,33 +106,36 @@ def login_view(request):
     else:
         return render(request, "network/login.html", {
             "active": 'login',
-            })
+        })
 
-        
+
 @login_required(login_url=login_view)
 def following_posts(request, username):
 
-    try:   
-        user = User.objects.get(username = username)
+    try:
+        user = User.objects.get(username=username)
     except User.DoesNotExist:
         return JsonResponse({"error": "User not found."}, status=404)
-        
+
     # Get users followed by requested user
-    users_following = Followers.objects.filter(user = user).values_list('following')
-    
+    users_following = Followers.objects.filter(
+        user=user).values_list('following')
+
     # Return posts in reverse chronological order
-    posts = Post.objects.filter(user__in=users_following).order_by("-timestamp")
+    posts = Post.objects.filter(
+        user__in=users_following).order_by("-timestamp")
 
     posts_paginator = Paginator(posts, 10)
     posts_page_number = request.GET.get('page')
     posts_page_obj = posts_paginator.get_page(posts_page_number)
 
     return render(request, "network/index.html", {
-            "page_obj": posts_page_obj,
-            "comment_form": CommentForm(),
-            "active": 'following',
-            })
-            
+        "page_obj": posts_page_obj,
+        "comment_form": CommentForm(),
+        "active": 'following',
+    })
+
+
 @login_required(login_url=login_view)
 def new_post(request):
 
@@ -159,8 +162,16 @@ def logout_view(request):
 
 def register(request):
     if request.method == "POST":
+
         username = request.POST["username"]
         email = request.POST["email"]
+        first_name = request.POST["first_name"]
+        last_name = request.POST["last_name"]
+
+        if username == "" or email == "" or first_name == "" or last_name == "":
+            return render(request, "network/register.html", {
+                "message": "All fields required."
+            })
 
         # Ensure password matches confirmation
         password = request.POST["password"]
@@ -172,7 +183,10 @@ def register(request):
 
         # Attempt to create new user
         try:
-            user = User.objects.create_user(username, email, password)
+            user = User.objects.create_user(
+                username, email, password, first_name=first_name, last_name=last_name)
+            user.save()
+            user.set_profile_image()
             user.save()
         except IntegrityError:
             return render(request, "network/register.html", {
@@ -183,7 +197,4 @@ def register(request):
     else:
         return render(request, "network/register.html", {
             "active": 'register',
-            })
-
-
-
+        })

@@ -1,38 +1,19 @@
 {% extends "network/layout.html" %} {% load static %}
 
 {% block script %}
-    <script type="module" src="{% static 'network/main.js' %}"></script>
+<script type="module" src="{% static 'network/main.js' %}"></script>
 {% endblock %}
 
 {% block body %}
 
-    <form class="container edit-popup popup post mb-5 mt-3">
-        {% include "network/partials/form_fields.html" with form=post_form %}
-        
-        <div class="d-flex justify-content-between">
-            <div class="btn btn-light cancel-edit-button">Cancel</div>
-            <input class="btn btn-info" type="submit" value="Edit post">
-        </div>
+{% include "network/partials/popup.html" %}
 
-    </form>
-    
-    <form class="container delete-popup popup post mb-5 mt-3">  
-        <h5 class="d-flex justify-content-center">Do you want to delete the post?</h5>
-        <p class="d-flex justify-content-center" >This action cannot be reversed</p>          
-        <div class="d-flex justify-content-between">
-            
-            <div class="btn btn-light cancel-delete-button">Cancel</div>
-                
-            <input class="btn btn-danger" type="submit" value="Delete post">
-        </div>
-
-    </form>
 
 {% if user.is_authenticated and post_form %}
-    <form class="post mb-5 mt-3" action="{% url 'new_post' %}"  method="POST">
-        {% include "network/partials/form_fields.html" with form=post_form %}
-        <input class="btn btn-light" type="submit" value="New post">
-    </form>
+<form class="form-new" action="{% url 'new_post' %}" method="POST">
+    {% include "network/partials/form_fields.html" with form=post_form %}
+    <input class="btn btn-light" type="submit" value="Post">
+</form>
 {% endif %}
 
 {% include "network/partials/popup.html" %}

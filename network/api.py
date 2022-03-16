@@ -8,6 +8,8 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 
 # Return all posts
+
+
 def get_all_posts(request):
 
     posts = Post.objects.all()
@@ -22,12 +24,12 @@ def get_user_posts(request, username):
 
     # Query for requested user
     try:
-        user = User.objects.get(username = username)
+        user = User.objects.get(username=username)
     except User.DoesNotExist:
         return JsonResponse({"error": "User not found."}, status=404)
 
     # Get all posts made by the user
-    posts = Post.objects.filter(user = user)
+    posts = Post.objects.filter(user=user)
 
     # Return posts in reverse chronologial order
     posts = posts.order_by("-timestamp").all()
@@ -59,7 +61,7 @@ def get_profile(request, username):
 
     # Query for requested user
     try:
-        user = User.objects.get(username = username)
+        user = User.objects.get(username=username)
     except User.DoesNotExist:
         return JsonResponse({"error": "User not found."}, status=404)
 
@@ -70,12 +72,11 @@ def get_following(request, username):
 
     # Query for requested user
     try:
-        user = User.objects.get(username = username)
+        user = User.objects.get(username=username)
     except User.DoesNotExist:
         return JsonResponse({"error": "User not found."}, status=404)
 
-
-    following = Followers.objects.filter(user = user)    
+    following = Followers.objects.filter(user=user)
 
     return JsonResponse([user.serialize_following() for user in following], safe=False)
 
@@ -84,13 +85,14 @@ def get_followers(request, username):
 
     # Query for requested user
     try:
-        user = User.objects.filter(username = username)
-    except User.DoesNotExist: 
+        user = User.objects.filter(username=username)
+    except User.DoesNotExist:
         return JsonResponse({"error": "User not found."}, status=404)
 
     followers = Followers.objects.filter(following__in=user)
 
     return JsonResponse([follower.serialize_followers() for follower in followers], safe=False)
+
 
 @csrf_exempt
 @login_required(login_url=login_view)
@@ -144,12 +146,12 @@ def new_comment(request, post_id):
     comment = Comment(
         user=request.user,
         content=content,
-        post = post,
+        post=post,
     )
     comment.save()
 
     return JsonResponse({"message": "Comment created successfully."}, status=201)
-    
+
 
 @login_required(login_url=login_view)
 def new_like(request, post_id):
@@ -169,10 +171,8 @@ def new_like(request, post_id):
     # Save post in database
     like = Likes(
         user=request.user,
-        post = post,
+        post=post,
     )
     like.save()
 
     return JsonResponse({"message": "Like created successfully."}, status=201)
-
-

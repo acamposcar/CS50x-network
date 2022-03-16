@@ -1,147 +1,170 @@
-$primary-color: rgb(255, 247, 233);
+$primary-color: #6ba2e6;
+$hover-color: #4a91e7;
 $border-color: rgb(219, 215, 219);
 
-body{
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: rgb(247, 247, 247);
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: rgb(247, 247, 247);
 }
 
-.btn-light{
-    border-color: rgb(255, 204, 0);
-    background-color: white;
-    border-width: 1.5px;
-    font-size: 0.9rem;
-    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+.btn-light {
+  border-color: $primary-color;
+  background-color: $primary-color;
+  border-width: 1.5px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: white;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 
-    &:hover{
-        border-color: $primary-color;
-        background-color: rgb(252, 239, 186);
-    }
-}
-
-a{
-    color: rgb(170, 136, 0);
-}
-a:hover{
-    color: rgba(53, 52, 40, 0.904);
-}
-.container{
-    max-width: 650px;
+  &:hover {
+    border-color: $hover-color;
+    background-color: $hover-color;
+    color: white;
+  }
 }
 
+.btn-danger {
+  background-color: white;
+  border-color: $primary-color;
+  color: black;
+  border-width: 2px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+
+  &:hover {
+    border-color: $hover-color;
+    background-color: $hover-color;
+    color: white;
+  }
+}
+
+.container {
+  max-width: 650px;
+}
+
+a {
+  text-decoration: none;
+}
 
 /* NAVBAR */
-nav{
-    background-color: white;
-
+nav {
+  background-color: white;
+  margin-bottom: 25px;
 }
 .nav-link.active {
-	font-weight: 500;
+  font-weight: 500;
 }
 
 /* POST */
 
-.post, .comment, .post-comment-form{
-    border: thin solid $border-color;
-    border-radius: 10px;
-    padding: 20px;
-    margin: 15px 0;
-    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
-    background-color: #FFF;
+.post {
+  background-color: #fff;
+  padding: 30px 30px 0px 30px;
+}
+.post-comment-form {
+  border: thin solid $border-color;
+  border-radius: 10px;
+  padding: 20px;
+  margin: 15px 0;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+  background-color: #fff;
 }
 
-a {
-    text-decoration: none;
-
-}
-
-.post-image{
-    width: 50px;
-    height: 50px;
-    object-fit: cover;
-    border-radius: 45px;
+.post-image {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  border-radius: 45px;
 }
 .post-name {
-    font-weight: 600;
-    font-family: Helvetica, sans-serif;
-    color: black;
+  font-weight: 600;
+  font-family: Helvetica, sans-serif;
+  color: black;
 }
 
 .post-username {
-    font-family: Helvetica, sans-serif;
-    color: grey;
+  font-family: Helvetica, sans-serif;
+  color: grey;
 }
 
 .post-date {
-    color: grey;
+  color: grey;
 }
 
-.post-content{
-    margin-bottom: 30px;
-    margin-top: 15px;
+.post-content {
+  margin-bottom: 20px;
+  margin-top: 15px;
 }
 
-.post-like-button{
-    border: none;
-    background-color: white;
+.post-like-button {
+  border: none;
+  background-color: white;
 }
 
-.post-like-heart, .post-comment-icon{
-    fill:none;
-    stroke: grey;
-    stroke-width: 1;
-    width: 20px;
-    height: 20px;
+.post-like-heart,
+.post-comment-icon {
+  fill: none;
+  stroke: grey;
+  stroke-width: 1;
+  width: 20px;
+  height: 20px;
 }
 
-.post-like-heart:hover{
-    fill: none;
-    stroke: rgb(233, 14, 43);
+.post-like-heart:hover {
+  fill: none;
+  stroke: rgb(233, 14, 43);
 }
 
-.post-like-heart.liked{
-    fill:rgb(233, 14, 43);
-    stroke: rgb(233, 14, 43);
+.post-like-heart.liked {
+  fill: rgb(233, 14, 43);
+  stroke: rgb(233, 14, 43);
 }
 
-.post-comments-button{
-    cursor: pointer;
+.post-comments-button {
+  cursor: pointer;
 }
 
-.post-comments{
-    transition: max-height 1s ease-out;
-    max-height: 0;
-    overflow: hidden;
+.post-comments {
+  transition: max-height 1s ease-out;
+  max-height: 0;
+  overflow: hidden;
+  padding: 0 30px;
 }
 
-.post-comments.active{
-    max-height: 1500px;
+.post-comments.active {
+  max-height: 1500px;
 }
 
-.post-comment-more{
-    display: none;
+.post-comment-more {
+  display: none;
 }
 
-.post-like-count, .post-comment-count{
-    font-size: 14px;
-    color:grey;
-
-}
-.dropdown-item{
-    cursor: pointer;
+.post-like-count,
+.post-comment-count {
+  font-size: 14px;
+  color: grey;
 }
 
-.comment-content{
-    margin-bottom: 15px;
-    margin-top: 15px;
+.dropdown-item {
+  cursor: pointer;
 }
 
-.comment-image{
-    width: 40px;
-    height: 40px;
-    object-fit: cover;
-    border-radius: 40px;
+.comment {
+  background-color: #fff;
+  padding: 15px 15px 0 15px;
+}
 
+.comment-content {
+  margin-bottom: 15px;
+  margin-top: 15px;
+}
+
+.comment-image {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  border-radius: 40px;
 }
 /* EDIT POPUP */
 
@@ -149,65 +172,76 @@ a {
   display: none;
   position: fixed;
   margin-left: -10px;
+  padding: 25px;
   top: 30%;
-  background: #FFF;
+  background: #fff;
   z-index: 20;
-  -webkit-box-shadow:  0px 0px 0px 9999px rgba(0, 0, 0, 0.8);
-  box-shadow:  0px 0px 0px 9999px rgba(0, 0, 0, 0.8);
+  -webkit-box-shadow: 0px 0px 0px 9999px rgba(0, 0, 0, 0.8);
+  box-shadow: 0px 0px 0px 9999px rgba(0, 0, 0, 0.8);
 }
 
-.edit-popup textarea{
-    height: 200px;
+.edit-popup textarea {
+  height: 200px;
 }
 
 /* FORM */
 
+.form-new {
+  background-color: #dfe1e7;
+  padding: 30px;
+}
+
+.form-comment {
+  background-color: #dfe1e7;
+  padding: 15px;
+}
 textarea.form-control {
   resize: none;
+  background-color: #dfe1e7;
   border: none;
-  
 }
 
-input[type=submit]{
-    display:block;
-    margin-left:auto;
+textarea.form-control:focus {
+  background-color: #dfe1e7;
+  border: none;
+  box-shadow: none;
 }
 
+input[type='submit'] {
+  display: block;
+  margin-left: auto;
+}
 
 /* PROFILE */
 
-.profile{
-    background-color: white;
-    padding-top: 30px;
-    padding-bottom: 8px;
-    margin-top: 20px;
-    margin-bottom: 30px;
-    border-bottom: thin solid $border-color;
-    border-top: thin solid $border-color;
-    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+.profile {
+  background-color: white;
+  padding-top: 30px;
+  padding-bottom: 8px;
+  margin-bottom: 15px;
 }
 
-.profile-image{
-    width: 150px;
-    height: 150px;
-    object-fit: cover;
-    border-radius: 20px;
+.profile-image {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 20px;
 }
 
-.profile-name{
-    font-size: 24px;
-    font-family: Helvetica, sans-serif;
+.profile-name {
+  font-size: 24px;
+  font-family: Helvetica, sans-serif;
 }
 
-.profile-follower-info{
-    border-top: thin solid $border-color;
+.profile-follower-info {
+  border-top: thin solid $border-color;
 }
 
-.profile-followers-group{
-    text-align: center;
+.profile-followers-group {
+  text-align: center;
 }
 
-.profile-followers-count{
-    font-weight: 700;
-    font-size: 20px;
+.profile-followers-count {
+  font-weight: 700;
+  font-size: 20px;
 }
