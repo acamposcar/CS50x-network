@@ -21,6 +21,11 @@ body {
     background-color: $hover-color;
     color: white;
   }
+  &:focus {
+    border-color: $hover-color;
+    background-color: $hover-color;
+    color: white;
+  }
 }
 
 .btn-danger {
@@ -33,6 +38,11 @@ body {
   box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 
   &:hover {
+    border-color: $hover-color;
+    background-color: $hover-color;
+    color: white;
+  }
+  &:focus {
     border-color: $hover-color;
     background-color: $hover-color;
     color: white;
