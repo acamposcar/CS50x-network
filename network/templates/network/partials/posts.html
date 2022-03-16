@@ -4,6 +4,8 @@
 
     {% include "network/partials/post.html" %}
 
+    {% empty %}
+    <div class="alert alert-danger">No post has been found. Follow people to display their posts.</div>
     {% endfor %}
 </div>
 
