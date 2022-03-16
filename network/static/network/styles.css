@@ -52,6 +52,14 @@ nav {
   font-weight: 500;
 }
 
+.navbar-nav {
+  align-items: center;
+}
+
+.navbar-brand {
+  margin-left: 1rem;
+}
+
 /* POST */
 .post {
   background-color: #fff;
@@ -113,6 +121,11 @@ nav {
   stroke: #e90e2b;
 }
 
+.post-comment-icon:hover {
+  fill: none;
+  stroke: #6ba2e6;
+}
+
 .post-like-heart.liked {
   fill: #e90e2b;
   stroke: #e90e2b;
@@ -141,6 +154,14 @@ nav {
 .post-comment-count {
   font-size: 14px;
   color: grey;
+}
+
+.post-like-count:hover {
+  color: #e90e2b;
+}
+
+.post-comment-count:hover {
+  color: #6ba2e6;
 }
 
 .dropdown-item {
