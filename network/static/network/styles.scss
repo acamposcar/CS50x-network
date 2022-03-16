@@ -41,6 +41,7 @@ body {
 
 .container {
   max-width: 650px;
+  padding: 0;
 }
 
 a {
@@ -244,4 +245,13 @@ input[type='submit'] {
 .profile-followers-count {
   font-weight: 700;
   font-size: 20px;
+}
+
+
+@media only screen and (max-width: 600px) {
+/*   For small screens */
+  .post {
+    background-color: #fff;
+    padding: 15px 15px 0px 15px;
+  }
 }
