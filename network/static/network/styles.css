@@ -60,6 +60,10 @@ nav {
   margin-left: 1rem;
 }
 
+.navbar-toggler {
+  margin-right: 1rem;
+}
+
 /* POST */
 .post {
   background-color: #fff;
