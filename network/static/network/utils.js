@@ -28,21 +28,6 @@ export function createCommentContainer(comment, post) {
 }
 
 
-
-export function avatarChangeColor(name) {
-  /**
-    *  Transform any string into a HEX Color
-    *  From: https://stackoverflow.com/a/17880920/12474129
-    */
-  const n = 'abcdefghijklmnopqrstuvwxyz'.split('');
-  const r = name
-    .split('')
-    .map((e) => n.indexOf(e))
-    .join('');
-  const l = parseFloat(`0.${(r * r * 1000).toString().replace(/^0/, '')}`);
-  return `#${Math.floor(l * 16777215).toString(16)}`;
-}
-
 export function getCookie(name) {
   /**
     *  Get cookie by name

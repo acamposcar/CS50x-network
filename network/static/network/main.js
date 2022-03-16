@@ -6,8 +6,6 @@ import {
   getComments,
 } from './fetch.js';
 
-import { avatarChangeColor } from './utils.js';
-
 export function showEditPopup(post) {
   /**
    *  Show popup to edit post
@@ -97,6 +95,5 @@ document.addEventListener('DOMContentLoaded', () => {
   // Change avatar color depending on username
   document.querySelectorAll('.user-avatar').forEach((item) => {
     const username = item.querySelector('.post-username').textContent;
-    item.querySelector('.avatar').style.fill = avatarChangeColor(username);
   });
 });
