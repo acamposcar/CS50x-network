@@ -125,7 +125,7 @@ nav {
   transition: max-height 1s ease-out;
   max-height: 0;
   overflow: hidden;
-  padding: 0 30px;
+  padding: 0;
 }
 
 .post-comments.active {
@@ -148,7 +148,7 @@ nav {
 
 .comment {
   background-color: #fff;
-  padding: 15px 15px 0 15px;
+  padding: 15px 0 15px;
 }
 
 .comment-content {
