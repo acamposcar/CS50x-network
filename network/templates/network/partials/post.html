@@ -6,12 +6,12 @@
         <img class="post-image" src="{{ post.user.profile_image }}" alt="Profile Image">
         <div>
             <div class="d-flex gap-1 align-items-baseline">
-                <a class="post-name" href="{% url 'user_profile' post.user.username %}">{{ post.user.first_name }} {{
-                    post.user.last_name }}</a>
-                <a class="post-username" href="{% url 'user_profile' post.user.username %}"><small>@{{
-                        post.user.username }}</small></a>
+                <a class="post-name" href="{% url 'user_profile' post.user.username %}">{{post.user.first_name}}
+                    {{post.user.last_name}}</a>
+                <a class="post-username"
+                    href="{% url 'user_profile' post.user.username %}"><small>@{{post.user.username}}</small></a>
             </div>
-            <a class="post-date" href="{% url 'post' post.id %}"><small>{{ post.timestamp }}</small></a>
+            <a class="post-date" href="{% url 'post' post.id %}"><small>{{post.timestamp}}</small></a>
         </div>
 
         {% if user == post.user %}
