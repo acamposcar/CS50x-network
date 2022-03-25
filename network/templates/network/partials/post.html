@@ -52,7 +52,7 @@
                 <div class="d-flex gap-1">
 
                     {% if user in post.users_likes %}
-
+                    <!-- Add class liked  -->
                     <svg class="post-like-heart liked" xmlns="http://www.w3.org/2000/svg" width="20" height="20"
                         viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="1" stroke-linecap="round"
                         stroke-linejoin="round" class="feather feather-heart">
@@ -60,12 +60,6 @@
                                     1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
                         </path>
                     </svg>
-
-                    {% if post.likes.all.count == 1 %}
-                    <div class="post-like-count">{{ post.likes.all.count }} Like</div>
-                    {% else %}
-                    <div class="post-like-count">{{ post.likes.all.count }} Likes</div>
-                    {% endif %}
 
                     {% else %}
 
@@ -76,13 +70,15 @@
                                     1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
                     </svg>
 
+                    {% endif %}
+
                     {% if post.likes.all.count == 1 %}
                     <div class="post-like-count">{{ post.likes.all.count }} Like</div>
                     {% else %}
                     <div class="post-like-count">{{ post.likes.all.count }} Likes</div>
                     {% endif %}
 
-                    {% endif %}
+
 
                 </div>
             </button>
