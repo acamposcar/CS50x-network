@@ -126,6 +126,15 @@ nav {
 
 }
 
+.post-like-button:hover .post-like-heart {
+  fill: none;
+  stroke: rgb(233, 14, 43);
+}
+
+.post-like-button:hover .post-like-count {
+  color: rgb(233, 14, 43);
+}
+
 .post-like-heart,
 .post-comment-icon {
   fill: none;
@@ -135,10 +144,6 @@ nav {
   height: 20px;
 }
 
-.post-like-heart:hover {
-  fill: none;
-  stroke: rgb(233, 14, 43);
-}
 
 .post-comment-icon:hover {
   fill: none;
@@ -152,8 +157,15 @@ nav {
 
 .post-comments-button {
   cursor: pointer;
+}
 
+.post-comments-button:hover .post-comment-count{
+  color: $primary-color;
+}
 
+.post-comments-button:hover .post-comment-icon {
+  fill: none;
+  stroke: $primary-color;
 }
 
 .post-comments {
@@ -177,21 +189,13 @@ nav {
   color: grey;
 }
 
-.post-like-count:hover{
-  color: rgb(233, 14, 43);
-}
-
-.post-comment-count:hover{
-  color: $primary-color;
-}
-
 .dropdown-item {
   cursor: pointer;
 }
 
 .comment {
   background-color: #fff;
-  padding: 15px 0 15px;
+  padding: 15px 5px 15px;
 }
 
 .comment-content {
@@ -200,10 +204,19 @@ nav {
 }
 
 .comment-image {
-  width: 40px;
-  height: 40px;
+  width: 30px;
+  height: 30px;
   object-fit: cover;
   border-radius: 40px;
+}
+
+.page-num{
+  color:grey;
+  padding-bottom: 20px;
+}
+
+.page-link{
+  font-size: smaller;
 }
 /* EDIT POPUP */
 

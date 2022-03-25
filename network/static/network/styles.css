@@ -122,6 +122,15 @@ nav {
   background-color: white;
 }
 
+.post-like-button:hover .post-like-heart {
+  fill: none;
+  stroke: #e90e2b;
+}
+
+.post-like-button:hover .post-like-count {
+  color: #e90e2b;
+}
+
 .post-like-heart,
 .post-comment-icon {
   fill: none;
@@ -129,11 +138,6 @@ nav {
   stroke-width: 1;
   width: 20px;
   height: 20px;
-}
-
-.post-like-heart:hover {
-  fill: none;
-  stroke: #e90e2b;
 }
 
 .post-comment-icon:hover {
@@ -148,6 +152,15 @@ nav {
 
 .post-comments-button {
   cursor: pointer;
+}
+
+.post-comments-button:hover .post-comment-count {
+  color: #6ba2e6;
+}
+
+.post-comments-button:hover .post-comment-icon {
+  fill: none;
+  stroke: #6ba2e6;
 }
 
 .post-comments {
@@ -171,21 +184,13 @@ nav {
   color: grey;
 }
 
-.post-like-count:hover {
-  color: #e90e2b;
-}
-
-.post-comment-count:hover {
-  color: #6ba2e6;
-}
-
 .dropdown-item {
   cursor: pointer;
 }
 
 .comment {
   background-color: #fff;
-  padding: 15px 0 15px;
+  padding: 15px 5px 15px;
 }
 
 .comment-content {
@@ -194,10 +199,19 @@ nav {
 }
 
 .comment-image {
-  width: 40px;
-  height: 40px;
+  width: 30px;
+  height: 30px;
   object-fit: cover;
   border-radius: 40px;
+}
+
+.page-num {
+  color: grey;
+  padding-bottom: 20px;
+}
+
+.page-link {
+  font-size: smaller;
 }
 
 /* EDIT POPUP */
