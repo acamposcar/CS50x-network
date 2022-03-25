@@ -1,4 +1,4 @@
-import { createCommentContainer, getCookie } from './utils.js';
+import { createCommentContainer, getCookie, removeFadeOut } from './utils.js';
 
 export function updateLike(post) {
   /*----------------
@@ -65,6 +65,8 @@ export function createComment(post) {
     });
 }
 
+
+
 export function deletePost(post, deletePopup) {
   /*----------------
   Send email (POST)
@@ -82,8 +84,8 @@ export function deletePost(post, deletePopup) {
       } else {
         // Hide popup
         deletePopup.style.display = 'none';
-        // Hide post
-        post.style.display = 'none';
+        // Remove post
+        removeFadeOut(post, 1000)
       }
     });
 }

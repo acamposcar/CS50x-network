@@ -48,3 +48,17 @@ export function getCookie(name) {
   }
   return cookieValue;
 }
+
+export function removeFadeOut( element, speed ) {
+  /**
+    *  Remove element with transition
+    *  From: https://stackoverflow.com/a/33424474/12474129
+    */
+    const seconds = speed/1000;
+    element.style.transition = "opacity "+seconds+"s ease";
+
+    element.style.opacity = 0;
+    setTimeout(function() {
+        element.remove();
+    }, speed);
+}
