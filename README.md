@@ -13,6 +13,14 @@ Design a Twitter-like social network website for making posts and following user
 
 ## Screenshots
 
+- ### Desktop
+![desktop](https://user-images.githubusercontent.com/9263545/160858343-78babd82-6fbf-4f6f-8d74-4832f208db63.png)
+
+- ### Small screens
+![phone](https://user-images.githubusercontent.com/9263545/160857899-7bcccf1e-1cd4-465f-960d-27de93eaba66.png)
+
+## Functionality
+
 - ### Pagination
 ![pagination](https://user-images.githubusercontent.com/9263545/160129870-052292dd-d01c-4ff9-b9f4-cdeefc2bec03.gif)
 
@@ -27,6 +35,7 @@ Design a Twitter-like social network website for making posts and following user
 
 - ### Profiles
 ![profile](https://user-images.githubusercontent.com/9263545/160129842-de761a73-8b2d-4f5f-8569-24feab61b625.gif)
+
 
 
 ## Installation
